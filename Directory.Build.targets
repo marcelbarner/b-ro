@@ -1,0 +1,7 @@
+<Project>
+  <!-- Common build targets can be defined here -->
+
+  <Target Name="PrintVersion" BeforeTargets="Build">
+    <Message Text="Building $(MSBuildProjectName) - Target Framework: $(TargetFramework)" Importance="high" />
+  </Target>
+</Project>
