@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -45,7 +46,8 @@ export class AccountListComponent implements OnInit {
   constructor(
     private accountService: AccountService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -158,9 +160,6 @@ export class AccountListComponent implements OnInit {
   }
 
   viewAccount(account: Account): void {
-    // TODO: Navigate to account detail
-    this.snackBar.open('Account detail not yet implemented', 'Close', {
-      duration: 2000,
-    });
+    this.router.navigate(['/finance/accounts', account.id]);
   }
 }
