@@ -1,0 +1,74 @@
+<div class="account-list-container">
+  <div class="header">
+    <h2>Bank Accounts</h2>
+    <button mat-raised-button color="primary" (click)="openCreateDialog()">
+      <mat-icon>add</mat-icon>
+      Create Account
+    </button>
+  </div>
+
+  <mat-form-field class="search-field">
+    <mat-label>Search accounts</mat-label>
+    <input
+      matInput
+      [(ngModel)]="searchTerm"
+      (ngModelChange)="applyFilter()"
+      placeholder="Search by name, IBAN, or currency"
+    />
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+
+  <div class="table-container">
+    <table mat-table [dataSource]="filteredAccounts" class="accounts-table">
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let account">{{ account.name }}</td>
+      </ng-container>
+
+      <!-- IBAN Column -->
+      <ng-container matColumnDef="iban">
+        <th mat-header-cell *matHeaderCellDef>IBAN</th>
+        <td mat-cell *matCellDef="let account">{{ account.iban }}</td>
+      </ng-container>
+
+      <!-- Currency Column -->
+      <ng-container matColumnDef="currency">
+        <th mat-header-cell *matHeaderCellDef>Currency</th>
+        <td mat-cell *matCellDef="let account">{{ account.currency }}</td>
+      </ng-container>
+
+      <!-- Balance Column -->
+      <ng-container matColumnDef="balance">
+        <th mat-header-cell *matHeaderCellDef>Balance</th>
+        <td mat-cell *matCellDef="let account">
+          {{ account.balance | number : '1.2-2' }} {{ account.currency }}
+        </td>
+      </ng-container>
+
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let account">
+          <button mat-icon-button (click)="viewAccount(account)" matTooltip="View">
+            <mat-icon>visibility</mat-icon>
+          </button>
+          <button mat-icon-button (click)="editAccount(account)" matTooltip="Edit">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button (click)="deleteAccount(account)" matTooltip="Delete">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+
+    <div *ngIf="isLoading" class="loading">Loading accounts...</div>
+    <div *ngIf="!isLoading && filteredAccounts.length === 0" class="no-data">
+      No accounts found.
+    </div>
+  </div>
+</div>
