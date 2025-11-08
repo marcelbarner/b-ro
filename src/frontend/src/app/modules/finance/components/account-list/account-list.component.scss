@@ -1,0 +1,38 @@
+.account-list-container {
+  padding: 24px;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+
+    h2 {
+      margin: 0;
+    }
+  }
+
+  .search-field {
+    width: 100%;
+    margin-bottom: 16px;
+  }
+
+  .table-container {
+    overflow-x: auto;
+  }
+
+  .accounts-table {
+    width: 100%;
+
+    th {
+      font-weight: 600;
+    }
+  }
+
+  .loading,
+  .no-data {
+    text-align: center;
+    padding: 32px;
+    color: rgba(0, 0, 0, 0.54);
+  }
+}
