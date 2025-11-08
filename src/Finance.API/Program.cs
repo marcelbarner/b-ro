@@ -29,8 +29,17 @@ builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 builder.Services.AddDbContext<FinanceDbContext>(options =>
 {
     var connectionString = builder.Configuration.GetConnectionString("FinanceDb") 
-        ?? "Host=localhost;Database=finance;Username=postgres;Password=postgres";
-    options.UseNpgsql(connectionString);
+        ?? "Data Source=finance.db";
+    
+    // Use SQLite for development, PostgreSQL for production
+    if (builder.Environment.IsDevelopment())
+    {
+        options.UseSqlite(connectionString);
+    }
+    else
+    {
+        options.UseNpgsql(connectionString);
+    }
 });
 
 // Add repositories

@@ -1,0 +1,59 @@
+<div class="account-detail-container">
+  <div class="header">
+    <button mat-icon-button (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h2>Account Details</h2>
+  </div>
+
+  <div *ngIf="isLoading" class="loading">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <div *ngIf="error" class="error">
+    {{ error }}
+    <button mat-raised-button color="primary" (click)="goBack()">Go Back</button>
+  </div>
+
+  <mat-card *ngIf="account && !isLoading">
+    <mat-card-header>
+      <mat-card-title>{{ account.name }}</mat-card-title>
+      <mat-card-subtitle>{{ account.iban }}</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="account-info">
+        <div class="info-row">
+          <span class="label">Currency:</span>
+          <span class="value">{{ account.currency }}</span>
+        </div>
+
+        <div class="info-row">
+          <span class="label">Balance:</span>
+          <span class="value balance">
+            {{ account.balance | number : '1.2-2' }} {{ account.currency }}
+          </span>
+        </div>
+
+        <div class="info-row">
+          <span class="label">Created:</span>
+          <span class="value">{{ account.createdAt | date : 'medium' }}</span>
+        </div>
+
+        <div class="info-row">
+          <span class="label">Last Updated:</span>
+          <span class="value">{{ account.updatedAt | date : 'medium' }}</span>
+        </div>
+      </div>
+
+      <div class="transactions-section">
+        <h3>Transactions</h3>
+        <p class="placeholder">Transaction list will be implemented in Issue #9</p>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-button (click)="goBack()">Back to Accounts</button>
+    </mat-card-actions>
+  </mat-card>
+</div>
