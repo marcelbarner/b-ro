@@ -64,7 +64,11 @@ export class AccountService {
    */
   private mapToAccount(response: AccountResponse): Account {
     return {
-      ...response,
+      id: response.accountId,
+      name: response.name,
+      iban: response.iban,
+      currency: response.currency,
+      balance: response.currentBalance,
       createdAt: new Date(response.createdAt),
       updatedAt: new Date(response.updatedAt),
     };

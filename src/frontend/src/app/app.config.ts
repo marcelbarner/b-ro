@@ -14,7 +14,7 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { provideDateFnsDatetimeAdapter } from '@ng-matero/extensions-date-fns-adapter';
 import { provideTranslateService, TranslateLoader } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TranslateHttpLoader, TRANSLATE_HTTP_LOADER_CONFIG } from '@ngx-translate/http-loader';
 import { NgxPermissionsModule } from 'ngx-permissions';
 import { provideToastr } from 'ngx-toastr';
 
@@ -63,6 +63,13 @@ export const appConfig: ApplicationConfig = {
       withComponentInputBinding()
     ),
     provideToastr(),
+    {
+      provide: TRANSLATE_HTTP_LOADER_CONFIG,
+      useValue: {
+        prefix: '/i18n/',
+        suffix: '.json',
+      },
+    },
     provideTranslateService({
       loader: {
         provide: TranslateLoader,

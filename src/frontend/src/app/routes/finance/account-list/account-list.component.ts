@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatTableModule } from '@angular/material/table';
@@ -23,7 +23,6 @@ import {
   selector: 'app-account-list',
   templateUrl: './account-list.component.html',
   styleUrl: './account-list.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
     CommonModule,
@@ -50,7 +49,8 @@ export class AccountListComponent implements OnInit {
     private accountService: AccountService,
     private dialog: MatDialog,
     private toastr: ToastrService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -64,10 +64,12 @@ export class AccountListComponent implements OnInit {
         this.accounts = accounts;
         this.filteredAccounts = accounts;
         this.isLoading = false;
+        this.cdr.markForCheck();
       },
       error: (error) => {
         this.toastr.error('Failed to load accounts');
         this.isLoading = false;
+        this.cdr.markForCheck();
         console.error('Error loading accounts:', error);
       },
     });
