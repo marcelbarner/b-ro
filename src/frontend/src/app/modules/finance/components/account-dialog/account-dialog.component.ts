@@ -90,7 +90,7 @@ export class AccountDialogComponent implements OnInit {
   onSubmit(): void {
     if (this.form.valid) {
       const formValue = this.form.value;
-      
+
       if (this.isEditMode) {
         // For edit, only send changed fields
         const updateData = {
