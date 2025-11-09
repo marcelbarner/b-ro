@@ -10,6 +10,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { PageHeaderComponent } from '@shared';
 import { ToastrService } from 'ngx-toastr';
 import { AccountService } from '@shared';
@@ -27,6 +28,7 @@ import {
   imports: [
     CommonModule,
     FormsModule,
+    TranslateModule,
     MatTableModule,
     MatButtonModule,
     MatIconModule,
@@ -50,7 +52,8 @@ export class AccountListComponent implements OnInit {
     private dialog: MatDialog,
     private toastr: ToastrService,
     private router: Router,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -98,11 +101,11 @@ export class AccountListComponent implements OnInit {
       if (result) {
         this.accountService.createAccount(result).subscribe({
           next: () => {
-            this.toastr.success('Account created successfully');
+            this.toastr.success(this.translate.instant('finance.account_created'));
             this.loadAccounts();
           },
           error: (error) => {
-            this.toastr.error('Failed to create account');
+            this.toastr.error(this.translate.instant('finance.account_creation_failed'));
             console.error('Error creating account:', error);
           },
         });
@@ -123,11 +126,11 @@ export class AccountListComponent implements OnInit {
       if (result) {
         this.accountService.updateAccount(account.id, result).subscribe({
           next: () => {
-            this.toastr.success('Account updated successfully');
+            this.toastr.success(this.translate.instant('finance.account_updated'));
             this.loadAccounts();
           },
           error: (error) => {
-            this.toastr.error('Failed to update account');
+            this.toastr.error(this.translate.instant('finance.account_update_failed'));
             console.error('Error updating account:', error);
           },
         });
@@ -136,14 +139,15 @@ export class AccountListComponent implements OnInit {
   }
 
   deleteAccount(account: Account): void {
-    if (confirm(`Delete account "${account.name}"?`)) {
+    const confirmMessage = this.translate.instant('finance.confirm_delete_account');
+    if (confirm(confirmMessage)) {
       this.accountService.deleteAccount(account.id).subscribe({
         next: () => {
-          this.toastr.success('Account deleted successfully');
+          this.toastr.success(this.translate.instant('finance.account_deleted'));
           this.loadAccounts();
         },
         error: (error) => {
-          this.toastr.error('Failed to delete account');
+          this.toastr.error(this.translate.instant('finance.account_deletion_failed'));
           console.error('Error deleting account:', error);
         },
       });
