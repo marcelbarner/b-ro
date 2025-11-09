@@ -16,6 +16,7 @@ public class FinanceDbContext : DbContext
 
     public DbSet<Account> Accounts => Set<Account>();
     public DbSet<Transaction> Transactions => Set<Transaction>();
+    public DbSet<ExchangeRate> ExchangeRates => Set<ExchangeRate>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -23,5 +24,6 @@ public class FinanceDbContext : DbContext
 
         modelBuilder.ApplyConfiguration(new AccountConfiguration());
         modelBuilder.ApplyConfiguration(new TransactionConfiguration());
+        modelBuilder.ApplyConfiguration(new ExchangeRateConfiguration());
     }
 }
