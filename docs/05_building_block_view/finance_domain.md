@@ -33,6 +33,8 @@ Exposes RESTful API endpoints for account and transaction management. Handles HT
 #### Controllers
 - **AccountsController**: Manages bank account CRUD operations
   - `GET /api/finance/accounts` - List all active accounts
+  - `GET /api/finance/accounts?currency=XXX` - List accounts with converted balances
+  - `GET /api/finance/accounts/total?currency=XXX` - Get portfolio total in specified currency
   - `POST /api/finance/accounts` - Create new account
   - `GET /api/finance/accounts/{id}` - Get account details
   - `PUT /api/finance/accounts/{id}` - Update account
@@ -47,6 +49,11 @@ Exposes RESTful API endpoints for account and transaction management. Handles HT
   - `DELETE /api/finance/transactions/{id}` - Delete transaction
   - `POST /api/finance/transactions/{id}/link-counter` - Link counter-transaction
   - `DELETE /api/finance/transactions/{id}/unlink-counter` - Unlink counter-transaction
+
+- **CurrenciesController**: Manages exchange rates and currency conversion
+  - `GET /api/finance/currencies` - List supported currencies with last update time
+  - `GET /api/finance/currencies/exchange-rate?from=XXX&to=YYY&date=YYYY-MM-DD` - Get exchange rate
+  - `GET /api/finance/currencies/convert?amount=X&from=XXX&to=YYY&date=YYYY-MM-DD` - Convert amount
 
 #### DTOs (Data Transfer Objects)
 - `AccountDto`: Account data for API responses
@@ -116,6 +123,8 @@ public class Transaction
     public string Description { get; set; }
     public Guid? CategoryId { get; set; }
     public Guid? CounterTransactionId { get; set; }
+    public decimal? ExchangeRateToEUR { get; set; }  // Exchange rate at transaction time
+    public decimal? ConvertedAmountEUR { get; }      // Computed: Amount * ExchangeRateToEUR
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset? UpdatedAt { get; set; }
     
@@ -131,6 +140,23 @@ public class Transaction
 }
 ```
 
+**ExchangeRate**
+```csharp
+public class ExchangeRate
+{
+    public int Id { get; set; }
+    public DateOnly Date { get; set; }
+    public string BaseCurrency { get; set; }      // Always "EUR" for ECB data
+    public string TargetCurrency { get; set; }
+    public decimal Rate { get; set; }
+    public ExchangeRateSource Source { get; set; }  // ECB90Day or ECBHistorical
+    public DateTimeOffset CreatedAt { get; set; }
+    
+    // Business methods
+    public void UpdateRate(decimal newRate);
+}
+```
+
 #### Value Objects
 - `Money`: Encapsulates amount and currency
 - `IBAN`: Value object with validation
@@ -138,10 +164,12 @@ public class Transaction
 #### Enums
 - `AccountType`: Checking, Savings, Cash, CreditCard
 - `TransactionType`: Income, Expense, Transfer
+- `ExchangeRateSource`: ECB90Day, ECBHistorical
 
 #### Interfaces
 - `IAccountRepository`: Repository interface for accounts
 - `ITransactionRepository`: Repository interface for transactions
+- `IExchangeRateProvider`: Interface for fetching exchange rates from ECB
 - `IUnitOfWork`: Unit of work pattern for transaction management
 
 #### Domain Services
@@ -154,6 +182,15 @@ public class Transaction
   - Calculate balance impacts
   - Validate counter-transaction linking
   - Enforce consistency rules
+
+- `ICurrencyService`: Currency conversion and exchange rate services
+  - Get exchange rates for specific dates
+  - Convert amounts between currencies
+  - Support triangular arbitrage through EUR
+
+- `IAccountAggregationService`: Multi-currency portfolio aggregation
+  - Calculate total portfolio value in any currency
+  - Convert account balances across currencies
 
 ### Dependencies
 - None (pure domain layer, no external dependencies)
@@ -170,6 +207,7 @@ Implements data persistence, database access, and external integrations. Uses En
   - DbSet<Account> Accounts
   - DbSet<Transaction> Transactions
   - DbSet<Category> Categories
+  - DbSet<ExchangeRate> ExchangeRates
   - Configuration via Fluent API
 
 #### Repositories
@@ -183,6 +221,33 @@ Implements data persistence, database access, and external integrations. Uses En
   - Query transactions with filters
   - Handle counter-transaction relationships
 
+#### Services
+- `CurrencyService`: Implements `ICurrencyService`
+  - Get exchange rates from database
+  - Convert amounts using rates or triangular arbitrage
+  - Cache rates in memory (1 hour TTL)
+  - Support historical and latest rates
+
+- `AccountAggregationService`: Implements `IAccountAggregationService`
+  - Calculate portfolio totals across currencies
+  - Convert account balances using CurrencyService
+  - Aggregate multi-currency portfolios
+
+#### External Services
+- `EcbExchangeRateProvider`: Implements `IExchangeRateProvider`
+  - Fetch 90-day exchange rates from ECB (XML)
+  - Fetch historical exchange rates from ECB (XML)
+  - Parse XML and create ExchangeRate entities
+  - Retry logic with exponential backoff
+
+#### Background Jobs
+- `ExchangeRateUpdateJob`: Hosted service for automatic updates
+  - Runs daily at 03:00 UTC
+  - Fetches latest 90-day rates from ECB
+  - Detects gaps (excluding weekends)
+  - Backfills missing historical data
+  - Transaction-safe database updates
+
 #### Entity Configurations
 - `AccountConfiguration`: EF Core entity configuration
   - Table mapping
@@ -191,11 +256,18 @@ Implements data persistence, database access, and external integrations. Uses En
   
 - `TransactionConfiguration`: EF Core entity configuration
   - Self-referencing relationship for counter-transactions
+  - Exchange rate column with precision 18,6
   - Indexes for performance
+
+- `ExchangeRateConfiguration`: EF Core entity configuration
+  - Unique index on (Date, TargetCurrency)
+  - Precision 18,6 for Rate column
 
 #### Migrations
 - Database schema migrations
 - Seed data for testing/development
+- `20251109144500_AddExchangeRateTables` - Exchange rate support
+- `20251109150000_AddExchangeRateToTransactions` - Transaction exchange rates
 
 ### Dependencies
 - Finance.Domain (for domain models and interfaces)
