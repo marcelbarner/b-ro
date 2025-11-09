@@ -61,7 +61,7 @@ The monorepo contains multiple services, each representing a distinct domain:
   /Shared.Domain/            # Shared domain interfaces and base classes
   /Shared.Infrastructure/    # Shared infrastructure (auth, caching, etc.)
   
-  /Frontend/                 # Angular 19 application
+  /Frontend/                 # Angular 20 application
     /src/
       /app/
         /features/

@@ -9,11 +9,12 @@
 - **Runtime**: Docker containers
 
 ### Frontend
-- **Framework**: Angular 19
+- **Framework**: Angular 20
 - **UI Libraries**:
   - ng-matero (admin template)
   - ng-matero/extensions
-  - Angular Material (component library)
+  - Angular Material 20 (component library)
+  - ng-matero 20 (admin template)
 - **Language**: TypeScript 5.x
 
 ### Infrastructure

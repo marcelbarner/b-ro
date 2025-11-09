@@ -17,8 +17,8 @@ This section documents the technical decisions and limitations that constrain th
 
 | Constraint | Decision | Rationale |
 |------------|----------|-----------|
-| Framework | Angular 19 | Component-based architecture, TypeScript support, enterprise-ready |
-| UI Library | Angular Material | Material Design components, accessibility support, well-maintained |
+| Framework | Angular 20 | Component-based architecture, TypeScript support, enterprise-ready |
+| UI Library | Angular Material 20 | Material Design components, accessibility support, well-maintained |
 | Admin Template | ng-matero | Pre-built admin layouts and components, reduces development time |
 | Extensions | ng-matero/extensions | Additional utilities and components for enhanced functionality |
 
