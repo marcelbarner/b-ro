@@ -64,7 +64,7 @@ This section describes organizational factors that influence the architecture an
 
 - **Stability Preference**: Use stable, LTS versions where possible
 - **.NET**: Version 9.0 (current version with long-term support)
-- **Angular**: Version 19 (current stable version)
+- **Angular**: Version 20 (current stable version)
 - **Upgrade Policy**: Follow major framework updates with evaluation period
 
 ### Tooling Requirements

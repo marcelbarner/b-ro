@@ -72,7 +72,7 @@ The system follows a microservices-oriented architecture with domain-driven desi
 
 ```
 ┌──────────────────────────────────────────────────┐
-│              Frontend (Angular 19)                │
+│              Frontend (Angular 20)                │
 │         Basic View | Expert View Modes            │
 └───────────────────┬──────────────────────────────┘
                     │ HTTPS/REST
