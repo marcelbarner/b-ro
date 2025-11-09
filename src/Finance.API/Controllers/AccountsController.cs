@@ -1,6 +1,7 @@
 using Finance.API.DTOs;
 using Finance.Domain.Entities;
 using Finance.Domain.Repositories;
+using Finance.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Finance.API.Controllers;
@@ -14,33 +15,108 @@ namespace Finance.API.Controllers;
 public class AccountsController : ControllerBase
 {
     private readonly IAccountRepository _accountRepository;
+    private readonly IAccountAggregationService _aggregationService;
     private readonly ILogger<AccountsController> _logger;
 
     public AccountsController(
         IAccountRepository accountRepository,
+        IAccountAggregationService aggregationService,
         ILogger<AccountsController> logger)
     {
         _accountRepository = accountRepository ?? throw new ArgumentNullException(nameof(accountRepository));
+        _aggregationService = aggregationService ?? throw new ArgumentNullException(nameof(aggregationService));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
     /// <summary>
     /// Gets all accounts.
     /// </summary>
+    /// <param name="currency">Optional: Get all accounts with balances converted to this currency.</param>
     [HttpGet]
     [ProducesResponseType<IEnumerable<AccountDto>>(StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<AccountDto>>> GetAccounts(CancellationToken cancellationToken)
+    [ProducesResponseType<IEnumerable<AccountWithConvertedBalanceDto>>(StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAccounts(
+        [FromQuery] string? currency,
+        CancellationToken cancellationToken)
     {
         try
         {
             var accounts = await _accountRepository.GetAllAsync(cancellationToken);
-            var accountDtos = accounts.Select(MapToDto);
-            return Ok(accountDtos);
+
+            // If no currency parameter, return accounts in their original currencies
+            if (string.IsNullOrWhiteSpace(currency))
+            {
+                var accountDtos = accounts.Select(MapToDto);
+                return Ok(accountDtos);
+            }
+
+            // Convert all balances to the specified currency
+            currency = currency.ToUpperInvariant();
+            var convertedBalances = await _aggregationService.GetAllAccountsWithConvertedBalancesAsync(
+                currency,
+                cancellationToken);
+
+            var convertedDtos = accounts.Select(account => new AccountWithConvertedBalanceDto(
+                account.AccountId,
+                account.Name,
+                account.IBAN,
+                account.Currency,
+                account.CurrentBalance,
+                currency,
+                convertedBalances.GetValueOrDefault(account.AccountId, 0m),
+                account.CreatedAt,
+                account.UpdatedAt
+            ));
+
+            return Ok(convertedDtos);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error retrieving accounts");
             return StatusCode(500, "An error occurred while retrieving accounts.");
+        }
+    }
+
+    /// <summary>
+    /// Gets the total portfolio balance across all accounts in the specified currency.
+    /// </summary>
+    /// <param name="currency">Target currency for the total (ISO 4217 code, e.g., EUR, USD, GBP).</param>
+    [HttpGet("total")]
+    [ProducesResponseType<PortfolioTotalDto>(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<PortfolioTotalDto>> GetTotalBalance(
+        [FromQuery] string currency,
+        CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(currency))
+        {
+            return BadRequest("Currency parameter is required.");
+        }
+
+        try
+        {
+            currency = currency.ToUpperInvariant();
+
+            var totalBalance = await _aggregationService.GetTotalBalanceInCurrencyAsync(
+                currency,
+                cancellationToken);
+
+            var accounts = await _accountRepository.GetAllAsync(cancellationToken);
+            var accountCount = accounts.Count();
+
+            var result = new PortfolioTotalDto(
+                currency,
+                totalBalance,
+                accountCount,
+                DateTimeOffset.UtcNow
+            );
+
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error calculating total balance in {Currency}", currency);
+            return StatusCode(500, "An error occurred while calculating the total balance.");
         }
     }
 

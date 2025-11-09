@@ -108,7 +108,7 @@ public class CurrencyService : ICurrencyService
         if (_cache.TryGetValue<IEnumerable<ExchangeRate>>(CachePrefixLatestRates, out var cached))
         {
             _logger.LogDebug("Cache hit for latest rates");
-            return cached;
+            return cached!;
         }
 
         // Get the latest date with rates
@@ -142,7 +142,7 @@ public class CurrencyService : ICurrencyService
         if (_cache.TryGetValue<IEnumerable<string>>(CachePrefixSupportedCurrencies, out var cached))
         {
             _logger.LogDebug("Cache hit for supported currencies");
-            return cached;
+            return cached!;
         }
 
         var currencies = await _context.ExchangeRates

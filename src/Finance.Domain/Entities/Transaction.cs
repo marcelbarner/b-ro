@@ -65,6 +65,22 @@ public class Transaction
     /// </summary>
     public DateTimeOffset UpdatedAt { get; private set; }
 
+    /// <summary>
+    /// Exchange rate to EUR at the time of transaction creation.
+    /// Null if transaction currency is EUR or rate was not available.
+    /// </summary>
+    public decimal? ExchangeRateToEUR { get; private set; }
+
+    /// <summary>
+    /// Gets the converted amount in EUR.
+    /// For EUR transactions, returns the original amount.
+    /// For other currencies, converts using the stored exchange rate.
+    /// </summary>
+    public decimal ConvertedAmountEUR => 
+        Currency == "EUR" 
+            ? Amount 
+            : Amount * (ExchangeRateToEUR ?? 1.0m);
+
     // Private constructor for EF Core
     private Transaction()
     {
@@ -79,7 +95,8 @@ public class Transaction
         string currency,
         TransactionType type,
         string description,
-        DateTimeOffset date)
+        DateTimeOffset date,
+        decimal? exchangeRateToEUR = null)
     {
         if (accountId == Guid.Empty)
             throw new ArgumentException("Account ID cannot be empty.", nameof(accountId));
@@ -100,6 +117,7 @@ public class Transaction
         Type = type;
         Description = description;
         Date = date;
+        ExchangeRateToEUR = exchangeRateToEUR;
         CreatedAt = DateTimeOffset.UtcNow;
         UpdatedAt = DateTimeOffset.UtcNow;
     }
