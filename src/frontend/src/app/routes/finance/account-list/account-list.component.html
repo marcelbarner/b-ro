@@ -2,20 +2,20 @@
 
 <div class="account-list-container">
   <div class="header">
-    <h2>Bank Accounts</h2>
+    <h2>{{ 'finance.account_list' | translate }}</h2>
     <button mat-raised-button color="primary" (click)="openCreateDialog()">
       <mat-icon>add</mat-icon>
-      Create Account
+      {{ 'finance.create_account' | translate }}
     </button>
   </div>
 
   <mat-form-field class="search-field">
-    <mat-label>Search accounts</mat-label>
+    <mat-label>{{ 'finance.search_accounts' | translate }}</mat-label>
     <input
       matInput
       [(ngModel)]="searchTerm"
       (ngModelChange)="applyFilter()"
-      placeholder="Search by name, IBAN, or currency"
+      [placeholder]="'finance.search_placeholder' | translate"
       />
       <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
@@ -24,41 +24,41 @@
       <table mat-table [dataSource]="filteredAccounts" class="accounts-table">
         <!-- Name Column -->
         <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef>Name</th>
+          <th mat-header-cell *matHeaderCellDef>{{ 'finance.account_name' | translate }}</th>
           <td mat-cell *matCellDef="let account">{{ account.name }}</td>
         </ng-container>
 
         <!-- IBAN Column -->
         <ng-container matColumnDef="iban">
-          <th mat-header-cell *matHeaderCellDef>IBAN</th>
+          <th mat-header-cell *matHeaderCellDef>{{ 'finance.iban' | translate }}</th>
           <td mat-cell *matCellDef="let account">{{ account.iban }}</td>
         </ng-container>
 
         <!-- Currency Column -->
         <ng-container matColumnDef="currency">
-          <th mat-header-cell *matHeaderCellDef>Currency</th>
+          <th mat-header-cell *matHeaderCellDef>{{ 'finance.currency' | translate }}</th>
           <td mat-cell *matCellDef="let account">{{ account.currency }}</td>
         </ng-container>
 
         <!-- Balance Column -->
         <ng-container matColumnDef="balance">
-          <th mat-header-cell *matHeaderCellDef>Balance</th>
+          <th mat-header-cell *matHeaderCellDef>{{ 'finance.balance' | translate }}</th>
           <td mat-cell *matCellDef="let account">
-            {{ account.balance | number : '1.2-2' }} {{ account.currency }}
+            {{ account.balance | currency : account.currency : 'symbol' : '1.2-2' }}
           </td>
         </ng-container>
 
         <!-- Actions Column -->
         <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <th mat-header-cell *matHeaderCellDef>{{ 'operation' | translate }}</th>
           <td mat-cell *matCellDef="let account">
-            <button mat-icon-button (click)="viewAccount(account)" matTooltip="View">
+            <button mat-icon-button (click)="viewAccount(account)" [matTooltip]="'finance.view_account' | translate">
               <mat-icon>visibility</mat-icon>
             </button>
-            <button mat-icon-button (click)="editAccount(account)" matTooltip="Edit">
+            <button mat-icon-button (click)="editAccount(account)" [matTooltip]="'finance.edit_account' | translate">
               <mat-icon>edit</mat-icon>
             </button>
-            <button mat-icon-button (click)="deleteAccount(account)" matTooltip="Delete">
+            <button mat-icon-button (click)="deleteAccount(account)" [matTooltip]="'finance.delete_account' | translate">
               <mat-icon>delete</mat-icon>
             </button>
           </td>
@@ -69,11 +69,11 @@
       </table>
 
       @if (isLoading) {
-        <div class="loading">Loading accounts...</div>
+        <div class="loading">{{ 'finance.loading_accounts' | translate }}</div>
       }
       @if (!isLoading && filteredAccounts.length === 0) {
         <div class="no-data">
-          No accounts found.
+          {{ 'finance.no_accounts' | translate }}
         </div>
       }
     </div>
