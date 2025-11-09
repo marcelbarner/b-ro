@@ -5,12 +5,16 @@
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Account Name</mat-label>
       <input matInput formControlName="name" placeholder="e.g., Main Checking Account" />
-      <mat-error *ngIf="form.get('name')?.hasError('required')">
-        Name is required
-      </mat-error>
-      <mat-error *ngIf="form.get('name')?.hasError('maxlength')">
-        Name must be at most 100 characters
-      </mat-error>
+      @if (form.get('name')?.hasError('required')) {
+        <mat-error>
+          Name is required
+        </mat-error>
+      }
+      @if (form.get('name')?.hasError('maxlength')) {
+        <mat-error>
+          Name must be at most 100 characters
+        </mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
@@ -20,44 +24,60 @@
         formControlName="iban"
         placeholder="e.g., DE89370400440532013000"
         [readonly]="isEditMode"
-      />
-      <mat-error *ngIf="form.get('iban')?.hasError('required')"> IBAN is required </mat-error>
-      <mat-error *ngIf="form.get('iban')?.hasError('pattern')">
-        Invalid IBAN format (must start with 2 letters, 2 digits, followed by alphanumeric
-        characters)
-      </mat-error>
-      <mat-error *ngIf="form.get('iban')?.hasError('maxlength')">
-        IBAN must be at most 34 characters
-      </mat-error>
-    </mat-form-field>
+        />
+        @if (form.get('iban')?.hasError('required')) {
+          <mat-error> IBAN is required </mat-error>
+        }
+        @if (form.get('iban')?.hasError('pattern')) {
+          <mat-error>
+            Invalid IBAN format (must start with 2 letters, 2 digits, followed by alphanumeric
+            characters)
+          </mat-error>
+        }
+        @if (form.get('iban')?.hasError('maxlength')) {
+          <mat-error>
+            IBAN must be at most 34 characters
+          </mat-error>
+        }
+      </mat-form-field>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Currency</mat-label>
-      <input matInput formControlName="currency" placeholder="e.g., EUR" [readonly]="isEditMode" />
-      <mat-error *ngIf="form.get('currency')?.hasError('required')">
-        Currency is required
-      </mat-error>
-      <mat-error *ngIf="form.get('currency')?.hasError('pattern')">
-        Currency must be a 3-letter code (e.g., EUR, USD)
-      </mat-error>
-    </mat-form-field>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Currency</mat-label>
+        <input matInput formControlName="currency" placeholder="e.g., EUR" [readonly]="isEditMode" />
+        @if (form.get('currency')?.hasError('required')) {
+          <mat-error>
+            Currency is required
+          </mat-error>
+        }
+        @if (form.get('currency')?.hasError('pattern')) {
+          <mat-error>
+            Currency must be a 3-letter code (e.g., EUR, USD)
+          </mat-error>
+        }
+      </mat-form-field>
 
-    <mat-form-field appearance="outline" class="full-width" *ngIf="!isEditMode">
-      <mat-label>Initial Balance</mat-label>
-      <input matInput type="number" formControlName="initialBalance" placeholder="0.00" />
-      <mat-error *ngIf="form.get('initialBalance')?.hasError('required')">
-        Initial balance is required
-      </mat-error>
-      <mat-error *ngIf="form.get('initialBalance')?.hasError('min')">
-        Initial balance must be at least 0
-      </mat-error>
-    </mat-form-field>
-  </form>
-</mat-dialog-content>
+      @if (!isEditMode) {
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Initial Balance</mat-label>
+          <input matInput type="number" formControlName="initialBalance" placeholder="0.00" />
+          @if (form.get('initialBalance')?.hasError('required')) {
+            <mat-error>
+              Initial balance is required
+            </mat-error>
+          }
+          @if (form.get('initialBalance')?.hasError('min')) {
+            <mat-error>
+              Initial balance must be at least 0
+            </mat-error>
+          }
+        </mat-form-field>
+      }
+    </form>
+  </mat-dialog-content>
 
-<mat-dialog-actions align="end">
-  <button mat-button (click)="onCancel()">Cancel</button>
-  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="!form.valid">
-    {{ submitButtonText }}
-  </button>
-</mat-dialog-actions>
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="onCancel()">Cancel</button>
+    <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="!form.valid">
+      {{ submitButtonText }}
+    </button>
+  </mat-dialog-actions>
