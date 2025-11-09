@@ -39,11 +39,6 @@ import { FormlyConfigModule } from './formly-config';
 import { LoginService } from '@core/authentication/login.service';
 import { FakeLoginService } from './fake-login.service';
 
-// Required for AOT compilation
-function TranslateHttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, 'i18n/', '.json');
-}
-
 // Http interceptor providers in outside-in order
 const interceptors = [
   noopInterceptor,
@@ -71,8 +66,7 @@ export const appConfig: ApplicationConfig = {
     provideTranslateService({
       loader: {
         provide: TranslateLoader,
-        useFactory: TranslateHttpLoaderFactory,
-        deps: [HttpClient],
+        useClass: TranslateHttpLoader,
       },
     }),
     importProvidersFrom(
