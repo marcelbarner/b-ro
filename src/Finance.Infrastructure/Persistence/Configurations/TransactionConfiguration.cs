@@ -47,6 +47,12 @@ public class TransactionConfiguration : IEntityTypeConfiguration<Transaction>
         builder.Property(t => t.UpdatedAt)
             .IsRequired();
 
+        builder.Property(t => t.ExchangeRateToEUR)
+            .HasPrecision(18, 6); // Higher precision for exchange rates
+
+        // Computed column - not mapped to database
+        builder.Ignore(t => t.ConvertedAmountEUR);
+
         // Index for efficient queries
         builder.HasIndex(t => t.AccountId);
         builder.HasIndex(t => t.Date);

@@ -58,6 +58,7 @@ builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 
 // Add currency services
 builder.Services.AddScoped<ICurrencyService, CurrencyService>();
+builder.Services.AddScoped<IAccountAggregationService, AccountAggregationService>();
 
 // Add background job for exchange rate updates
 builder.Services.AddHostedService<ExchangeRateUpdateJob>();

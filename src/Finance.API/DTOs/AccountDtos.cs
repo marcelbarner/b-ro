@@ -15,6 +15,31 @@ public record AccountDto(
 );
 
 /// <summary>
+/// DTO for account information with converted balance.
+/// </summary>
+public record AccountWithConvertedBalanceDto(
+    Guid AccountId,
+    string Name,
+    string IBAN,
+    string OriginalCurrency,
+    decimal OriginalBalance,
+    string ConvertedCurrency,
+    decimal ConvertedBalance,
+    DateTimeOffset CreatedAt,
+    DateTimeOffset UpdatedAt
+);
+
+/// <summary>
+/// DTO for total portfolio balance.
+/// </summary>
+public record PortfolioTotalDto(
+    string Currency,
+    decimal TotalBalance,
+    int AccountCount,
+    DateTimeOffset CalculatedAt
+);
+
+/// <summary>
 /// DTO for creating a new account.
 /// </summary>
 public record CreateAccountDto(
