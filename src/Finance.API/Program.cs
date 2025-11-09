@@ -1,6 +1,10 @@
 using Finance.Domain.Repositories;
+using Finance.Domain.Services;
+using Finance.Infrastructure.BackgroundJobs;
+using Finance.Infrastructure.ExternalServices;
 using Finance.Infrastructure.Persistence;
 using Finance.Infrastructure.Persistence.Repositories;
+using Finance.Infrastructure.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +29,12 @@ builder.Services.AddControllers();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
+// Add Memory Cache for currency service
+builder.Services.AddMemoryCache();
+
+// Add HttpClient for ECB provider
+builder.Services.AddHttpClient<IExchangeRateProvider, EcbExchangeRateProvider>();
+
 // Add DbContext
 builder.Services.AddDbContext<FinanceDbContext>(options =>
 {
@@ -45,6 +55,12 @@ builder.Services.AddDbContext<FinanceDbContext>(options =>
 // Add repositories
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+
+// Add currency services
+builder.Services.AddScoped<ICurrencyService, CurrencyService>();
+
+// Add background job for exchange rate updates
+builder.Services.AddHostedService<ExchangeRateUpdateJob>();
 
 // Add Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
