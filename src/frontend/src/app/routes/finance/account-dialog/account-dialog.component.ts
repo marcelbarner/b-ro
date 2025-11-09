@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
@@ -14,7 +14,7 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { Account } from '../../models/account.model';
+import { Account } from '@shared';
 
 export interface AccountDialogData {
   account?: Account;
@@ -23,6 +23,10 @@ export interface AccountDialogData {
 
 @Component({
   selector: 'app-account-dialog',
+  templateUrl: './account-dialog.component.html',
+  styleUrl: './account-dialog.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -31,8 +35,6 @@ export interface AccountDialogData {
     MatInputModule,
     MatButtonModule,
   ],
-  templateUrl: './account-dialog.component.html',
-  styleUrl: './account-dialog.component.scss',
 })
 export class AccountDialogComponent implements OnInit {
   form: FormGroup;
@@ -110,4 +112,3 @@ export class AccountDialogComponent implements OnInit {
     this.dialogRef.close();
   }
 }
-

@@ -1,24 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { AccountService } from '../../services/account.service';
-import { Account } from '../../models/account.model';
+import { PageHeaderComponent } from '@shared';
+import { AccountService, Account } from '@shared';
 
 @Component({
   selector: 'app-account-detail',
+  templateUrl: './account-detail.component.html',
+  styleUrl: './account-detail.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
   imports: [
     CommonModule,
     MatCardModule,
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
+    PageHeaderComponent,
   ],
-  templateUrl: './account-detail.component.html',
-  styleUrl: './account-detail.component.scss',
 })
 export class AccountDetailComponent implements OnInit {
   account: Account | null = null;

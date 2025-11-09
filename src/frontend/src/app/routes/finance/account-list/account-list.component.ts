@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatTableModule } from '@angular/material/table';
@@ -8,11 +8,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSortModule } from '@angular/material/sort';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormsModule } from '@angular/forms';
-import { AccountService } from '../../services/account.service';
-import { Account, CreateAccountDto, UpdateAccountDto } from '../../models/account.model';
+import { PageHeaderComponent } from '@shared';
+import { ToastrService } from 'ngx-toastr';
+import { AccountService } from '@shared';
+import { Account, CreateAccountDto, UpdateAccountDto } from '@shared';
 import {
   AccountDialogComponent,
   AccountDialogData,
@@ -20,6 +21,10 @@ import {
 
 @Component({
   selector: 'app-account-list',
+  templateUrl: './account-list.component.html',
+  styleUrl: './account-list.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
   imports: [
     CommonModule,
     FormsModule,
@@ -30,11 +35,9 @@ import {
     MatFormFieldModule,
     MatSortModule,
     MatDialogModule,
-    MatSnackBarModule,
     MatTooltipModule,
+    PageHeaderComponent,
   ],
-  templateUrl: './account-list.component.html',
-  styleUrl: './account-list.component.scss',
 })
 export class AccountListComponent implements OnInit {
   accounts: Account[] = [];
@@ -46,7 +49,7 @@ export class AccountListComponent implements OnInit {
   constructor(
     private accountService: AccountService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar,
+    private toastr: ToastrService,
     private router: Router
   ) {}
 
@@ -63,9 +66,7 @@ export class AccountListComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        this.snackBar.open('Failed to load accounts', 'Close', {
-          duration: 3000,
-        });
+        this.toastr.error('Failed to load accounts');
         this.isLoading = false;
         console.error('Error loading accounts:', error);
       },
@@ -95,15 +96,11 @@ export class AccountListComponent implements OnInit {
       if (result) {
         this.accountService.createAccount(result).subscribe({
           next: () => {
-            this.snackBar.open('Account created successfully', 'Close', {
-              duration: 3000,
-            });
+            this.toastr.success('Account created successfully');
             this.loadAccounts();
           },
           error: (error) => {
-            this.snackBar.open('Failed to create account', 'Close', {
-              duration: 3000,
-            });
+            this.toastr.error('Failed to create account');
             console.error('Error creating account:', error);
           },
         });
@@ -124,15 +121,11 @@ export class AccountListComponent implements OnInit {
       if (result) {
         this.accountService.updateAccount(account.id, result).subscribe({
           next: () => {
-            this.snackBar.open('Account updated successfully', 'Close', {
-              duration: 3000,
-            });
+            this.toastr.success('Account updated successfully');
             this.loadAccounts();
           },
           error: (error) => {
-            this.snackBar.open('Failed to update account', 'Close', {
-              duration: 3000,
-            });
+            this.toastr.error('Failed to update account');
             console.error('Error updating account:', error);
           },
         });
@@ -144,15 +137,11 @@ export class AccountListComponent implements OnInit {
     if (confirm(`Delete account "${account.name}"?`)) {
       this.accountService.deleteAccount(account.id).subscribe({
         next: () => {
-          this.snackBar.open('Account deleted successfully', 'Close', {
-            duration: 3000,
-          });
+          this.toastr.success('Account deleted successfully');
           this.loadAccounts();
         },
         error: (error) => {
-          this.snackBar.open('Failed to delete account', 'Close', {
-            duration: 3000,
-          });
+          this.toastr.error('Failed to delete account');
           console.error('Error deleting account:', error);
         },
       });

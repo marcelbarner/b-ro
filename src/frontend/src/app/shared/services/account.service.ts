@@ -6,7 +6,7 @@ import {
   AccountResponse,
   CreateAccountDto,
   UpdateAccountDto,
-} from '../models/account.model';
+} from '../interfaces/account.model';
 
 @Injectable({
   providedIn: 'root',

@@ -60,6 +60,8 @@
     "profile.overview": "Overview",
     "profile.settings": "Settings",
     "extensions": "Extensions",
+    "finance": "Finance",
+    "finance.accounts": "Accounts",
     "sessions": "Sessions",
     "sessions.403": "403",
     "sessions.404": "404",
