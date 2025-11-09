@@ -34,11 +34,12 @@ export interface UpdateAccountDto {
  * Response DTO from API
  */
 export interface AccountResponse {
-  id: string;
+  accountId: string;
   name: string;
   iban: string;
   currency: string;
-  balance: number;
+  initialBalance: number;
+  currentBalance: number;
   createdAt: string;
   updatedAt: string;
 }
