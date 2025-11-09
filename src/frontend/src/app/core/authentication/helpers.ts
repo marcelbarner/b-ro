@@ -2,14 +2,14 @@ import { fromByteArray, toByteArray } from 'base64-js';
 
 export class Base64 {
   static encode(plainText: string): string {
-    return fromByteArray(pack(plainText)).replace(/[+/=]/g, m => {
-      return { '+': '-', '/': '_', '=': '' }[m] as string;
+    return fromByteArray(pack(plainText)).replace(/[+/=]/g, (m: string) => {
+      return ({ '+': '-', '/': '_', '=': '' } as Record<string, string>)[m] as string;
     });
   }
 
   static decode(b64: string): string {
-    b64 = b64.replace(/[-_]/g, m => {
-      return { '-': '+', '_': '/' }[m] as string;
+    b64 = b64.replace(/[-_]/g, (m: string) => {
+      return ({ '-': '+', '_': '/' } as Record<string, string>)[m] as string;
     });
     while (b64.length % 4) {
       b64 += '=';
