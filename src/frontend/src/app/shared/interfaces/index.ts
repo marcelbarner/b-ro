@@ -16,3 +16,6 @@ export interface IProfile {
   website: string;
   date: string;
 }
+
+// Finance domain models
+export * from './account.model';
