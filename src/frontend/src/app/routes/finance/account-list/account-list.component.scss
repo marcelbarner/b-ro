@@ -10,6 +10,12 @@
     h2 {
       margin: 0;
     }
+
+    .header-actions {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
   }
 
   .search-field {
@@ -26,6 +32,16 @@
 
     th {
       font-weight: 600;
+    }
+
+    .converted-balance {
+      font-weight: 500;
+      color: #1976d2;
+
+      .same-currency {
+        color: rgba(0, 0, 0, 0.38);
+        font-style: italic;
+      }
     }
   }
 

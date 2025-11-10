@@ -14,7 +14,10 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { PageHeaderComponent } from '@shared';
 import { ToastrService } from 'ngx-toastr';
 import { AccountService } from '@shared';
-import { Account, CreateAccountDto, UpdateAccountDto } from '@shared';
+import { Account, CreateAccountDto, UpdateAccountDto, AccountWithConvertedBalance } from '@shared';
+import { CurrencyService } from '../../../shared/services/currency.service';
+import { CurrencySelectorComponent } from '../../../shared/components/currency-selector/currency-selector.component';
+import { CurrencyFormatPipe } from '../../../shared/pipes/currency-format.pipe';
 import {
   AccountDialogComponent,
   AccountDialogData,
@@ -38,17 +41,24 @@ import {
     MatDialogModule,
     MatTooltipModule,
     PageHeaderComponent,
+    CurrencySelectorComponent,
+    CurrencyFormatPipe,
   ],
 })
 export class AccountListComponent implements OnInit {
   accounts: Account[] = [];
   filteredAccounts: Account[] = [];
-  displayedColumns: string[] = ['name', 'iban', 'currency', 'balance', 'actions'];
+  accountsWithConversion: AccountWithConvertedBalance[] = [];
+  filteredAccountsWithConversion: AccountWithConvertedBalance[] = [];
+  displayedColumns: string[] = ['name', 'iban', 'currency', 'balance', 'convertedBalance', 'actions'];
   searchTerm = '';
   isLoading = false;
+  displayCurrency = 'EUR';
+  showDualCurrency = true;
 
   constructor(
     private accountService: AccountService,
+    private currencyService: CurrencyService,
     private dialog: MatDialog,
     private toastr: ToastrService,
     private router: Router,
@@ -57,15 +67,21 @@ export class AccountListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadAccounts();
+    // Subscribe to currency changes
+    this.currencyService.selectedCurrency$.subscribe((currency: string) => {
+      this.displayCurrency = currency;
+      this.loadAccounts();
+    });
   }
 
   loadAccounts(): void {
     this.isLoading = true;
-    this.accountService.getAccounts().subscribe({
+    
+    // Load accounts with conversion
+    this.accountService.getAccountsWithConvertedBalances(this.displayCurrency).subscribe({
       next: (accounts) => {
-        this.accounts = accounts;
-        this.filteredAccounts = accounts;
+        this.accountsWithConversion = accounts;
+        this.filteredAccountsWithConversion = accounts;
         this.isLoading = false;
         this.cdr.markForCheck();
       },
@@ -80,11 +96,12 @@ export class AccountListComponent implements OnInit {
 
   applyFilter(): void {
     const term = this.searchTerm.toLowerCase();
-    this.filteredAccounts = this.accounts.filter(
+    this.filteredAccountsWithConversion = this.accountsWithConversion.filter(
       (account) =>
         account.name.toLowerCase().includes(term) ||
         account.iban.toLowerCase().includes(term) ||
-        account.currency.toLowerCase().includes(term)
+        account.originalCurrency.toLowerCase().includes(term) ||
+        account.convertedCurrency.toLowerCase().includes(term)
     );
   }
 
@@ -113,18 +130,29 @@ export class AccountListComponent implements OnInit {
     });
   }
 
-  editAccount(account: Account): void {
+  editAccount(account: AccountWithConvertedBalance): void {
+    // Convert to Account for the dialog
+    const accountData: Account = {
+      id: account.accountId,
+      name: account.name,
+      iban: account.iban,
+      currency: account.originalCurrency,
+      balance: account.originalBalance,
+      createdAt: new Date(account.createdAt),
+      updatedAt: new Date(account.updatedAt),
+    };
+
     const dialogRef = this.dialog.open<AccountDialogComponent, AccountDialogData>(
       AccountDialogComponent,
       {
         width: '500px',
-        data: { mode: 'edit', account },
+        data: { mode: 'edit', account: accountData },
       }
     );
 
     dialogRef.afterClosed().subscribe((result: UpdateAccountDto) => {
       if (result) {
-        this.accountService.updateAccount(account.id, result).subscribe({
+        this.accountService.updateAccount(account.accountId, result).subscribe({
           next: () => {
             this.toastr.success(this.translate.instant('finance.account_updated'));
             this.loadAccounts();
@@ -138,10 +166,10 @@ export class AccountListComponent implements OnInit {
     });
   }
 
-  deleteAccount(account: Account): void {
+  deleteAccount(account: AccountWithConvertedBalance): void {
     const confirmMessage = this.translate.instant('finance.confirm_delete_account');
     if (confirm(confirmMessage)) {
-      this.accountService.deleteAccount(account.id).subscribe({
+      this.accountService.deleteAccount(account.accountId).subscribe({
         next: () => {
           this.toastr.success(this.translate.instant('finance.account_deleted'));
           this.loadAccounts();
@@ -154,7 +182,7 @@ export class AccountListComponent implements OnInit {
     }
   }
 
-  viewAccount(account: Account): void {
-    this.router.navigate(['/finance/accounts', account.id]);
+  viewAccount(account: AccountWithConvertedBalance): void {
+    this.router.navigate(['/finance/accounts', account.accountId]);
   }
 }
