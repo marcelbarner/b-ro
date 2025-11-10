@@ -1,8 +1,8 @@
 using System.Net;
 using System.Net.Http.Json;
-using FluentAssertions;
 using Finance.API.DTOs;
 using Finance.Domain.Entities;
+using FluentAssertions;
 
 namespace Finance.API.IntegrationTests;
 
@@ -150,7 +150,7 @@ public class TransactionsControllerTests : IClassFixture<AspireAppFixture>
         // Arrange
         var fromAccount = await CreateTestAccountAsync($"From Account {Guid.NewGuid()}", "EUR", 1000);
         var toAccount = await CreateTestAccountAsync($"To Account {Guid.NewGuid()}", "EUR", 500);
-        
+
         var transfer = new CreateTransferDto(
             FromAccountId: fromAccount.AccountId,
             ToAccountId: toAccount.AccountId,
@@ -177,7 +177,7 @@ public class TransactionsControllerTests : IClassFixture<AspireAppFixture>
         // Arrange
         var fromAccount = await CreateTestAccountAsync($"Poor Account {Guid.NewGuid()}", "EUR", 50);
         var toAccount = await CreateTestAccountAsync($"Rich Account {Guid.NewGuid()}", "EUR", 1000);
-        
+
         var transfer = new CreateTransferDto(
             FromAccountId: fromAccount.AccountId,
             ToAccountId: toAccount.AccountId,
@@ -198,7 +198,7 @@ public class TransactionsControllerTests : IClassFixture<AspireAppFixture>
         // Arrange
         var eurAccount = await CreateTestAccountAsync($"EUR Account {Guid.NewGuid()}", "EUR", 1000);
         var usdAccount = await CreateTestAccountAsync($"USD Account {Guid.NewGuid()}", "USD", 500);
-        
+
         var transfer = new CreateTransferDto(
             FromAccountId: eurAccount.AccountId,
             ToAccountId: usdAccount.AccountId,
@@ -242,7 +242,7 @@ public class TransactionsControllerTests : IClassFixture<AspireAppFixture>
     {
         // Arrange
         var account = await CreateTestAccountAsync($"Link Test {Guid.NewGuid()}", "EUR", 1000);
-        
+
         // Create two transactions
         var transaction1 = new CreateTransactionDto(
             Amount: -100.00m,
@@ -251,7 +251,7 @@ public class TransactionsControllerTests : IClassFixture<AspireAppFixture>
             Description: "Transaction 1",
             Date: DateTimeOffset.UtcNow
         );
-        
+
         var transaction2 = new CreateTransactionDto(
             Amount: 100.00m,
             Currency: "EUR",
@@ -270,7 +270,7 @@ public class TransactionsControllerTests : IClassFixture<AspireAppFixture>
 
         // Act
         var response = await _httpClient.PostAsJsonAsync(
-            $"/api/finance/transactions/{created1!.TransactionId}/link-counter", 
+            $"/api/finance/transactions/{created1!.TransactionId}/link-counter",
             linkDto
         );
 

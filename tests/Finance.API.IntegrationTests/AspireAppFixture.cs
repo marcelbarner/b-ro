@@ -45,7 +45,7 @@ public class AspireAppFixture : IAsyncLifetime
     public async Task DisposeAsync()
     {
         _httpClient?.Dispose();
-        
+
         if (_app != null)
         {
             await _app.DisposeAsync();

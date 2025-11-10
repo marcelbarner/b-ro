@@ -37,7 +37,7 @@ public class AdminController : ControllerBase
             _logger.LogInformation("Manual exchange rate seed triggered");
 
             var rates = await _exchangeRateProvider.Fetch90DayRatesAsync(cancellationToken);
-            
+
             if (rates == null || !rates.Any())
             {
                 return BadRequest("Failed to fetch exchange rates from ECB");
@@ -45,15 +45,15 @@ public class AdminController : ControllerBase
 
             // Clear existing rates
             _context.ExchangeRates.RemoveRange(_context.ExchangeRates);
-            
+
             // Add new rates
             await _context.ExchangeRates.AddRangeAsync(rates, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 
             _logger.LogInformation("Seeded {Count} exchange rates", rates.Count());
 
-            return Ok(new 
-            { 
+            return Ok(new
+            {
                 message = "Exchange rates seeded successfully",
                 count = rates.Count(),
                 latestDate = rates.Max(r => r.Date),

@@ -78,7 +78,7 @@ public class AccountTests
     {
         // Arrange
         var account = new Account("Checking Account", "DE89370400440532013000", "EUR", 1000m);
-        
+
         // Note: In real scenario, transactions would be added via repository
         // This is simplified for testing the calculation logic
         var transactions = new List<Transaction>
