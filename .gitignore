@@ -52,6 +52,15 @@ artifacts/
 *.coverage
 *.coveragexml
 
+# Coverage reports
+CoverageReport/
+coverage/
+*.cobertura.xml
+
+# Mutation testing
+StrykerOutput/
+**/stryker-temp/
+
 # Files built by Visual Studio
 *_i.c
 *_p.c
