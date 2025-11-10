@@ -144,7 +144,12 @@ When generating production code:
    - Fix any failing tests before proceeding
    - Verify code coverage meets the 70% threshold
 
-3. **Build Successfully**
+3. **Run Mutation Testing**
+   - Run `dotnet stryker` in the test project directory (e.g., `tests/Finance.Domain.Tests`)
+   - Review mutation score to ensure quality (target: High ≥80%, Low ≥60%)
+   - Address any gaps in test effectiveness revealed by mutations
+
+4. **Build Successfully**
    - Run `dotnet build` to ensure the solution builds without errors
    - Address any compiler warnings (warnings are treated as errors in CI)
 
