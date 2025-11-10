@@ -8,7 +8,7 @@ namespace Finance.API.Controllers;
 /// API endpoints for currency management and exchange rate operations.
 /// </summary>
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/finance/currencies")]
 public class CurrenciesController : ControllerBase
 {
     private readonly ICurrencyService _currencyService;
