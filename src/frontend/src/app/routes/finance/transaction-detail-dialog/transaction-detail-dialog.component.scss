@@ -1,0 +1,67 @@
+.transaction-details {
+  padding: 16px 0;
+
+  .detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+
+    .label {
+      font-weight: 500;
+      color: rgba(0, 0, 0, 0.6);
+      min-width: 150px;
+    }
+
+    .value {
+      text-align: right;
+      flex: 1;
+
+      &.amount {
+        font-size: 1.2em;
+        font-weight: 600;
+      }
+
+      &.transaction-id {
+        font-family: monospace;
+        font-size: 0.85em;
+        word-break: break-all;
+      }
+    }
+
+    &.metadata {
+      font-size: 0.9em;
+      opacity: 0.7;
+    }
+  }
+
+  .positive-amount {
+    color: #4caf50;
+  }
+
+  .negative-amount {
+    color: #f44336;
+  }
+
+  .counter-transaction-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .linked-icon {
+      color: #2196f3;
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+
+    .value {
+      font-family: monospace;
+      font-size: 0.85em;
+    }
+  }
+
+  mat-divider {
+    margin: 8px 0;
+  }
+}

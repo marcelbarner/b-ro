@@ -1,0 +1,76 @@
+<h2 mat-dialog-title>{{ 'transactions.detail.title' | translate }}</h2>
+
+<mat-dialog-content>
+  @if (transaction()) {
+    <div class="transaction-details">
+      <!-- Type Badge -->
+      <div class="detail-row">
+        <span class="label">{{ 'transactions.table.type' | translate }}</span>
+        <mat-chip [color]="getTypeColor(transaction()!.type)" highlighted>
+          {{ getTypeLabel(transaction()!.type) | translate }}
+        </mat-chip>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <!-- Date -->
+      <div class="detail-row">
+        <span class="label">{{ 'transactions.table.date' | translate }}</span>
+        <span class="value">{{ transaction()!.date | date: 'medium' }}</span>
+      </div>
+
+      <!-- Description -->
+      <div class="detail-row">
+        <span class="label">{{ 'transactions.table.description' | translate }}</span>
+        <span class="value">{{ transaction()!.description }}</span>
+      </div>
+
+      <!-- Amount -->
+      <div class="detail-row">
+        <span class="label">{{ 'transactions.table.amount' | translate }}</span>
+        <span
+          class="value amount"
+          [class.positive-amount]="transaction()!.amount > 0"
+          [class.negative-amount]="transaction()!.amount < 0"
+        >
+          {{ transaction()!.amount | number: '1.2-2' }} {{ transaction()!.currency }}
+        </span>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <!-- Counter Transaction Link -->
+      @if (transaction()!.counterTransactionId) {
+        <div class="detail-row">
+          <span class="label">{{ 'transactions.detail.counter_transaction' | translate }}</span>
+          <div class="counter-transaction-info">
+            <mat-icon class="linked-icon">link</mat-icon>
+            <span class="value">{{ transaction()!.counterTransactionId }}</span>
+          </div>
+        </div>
+      }
+
+      <mat-divider></mat-divider>
+
+      <!-- Metadata -->
+      <div class="detail-row metadata">
+        <span class="label">{{ 'common.created' | translate }}</span>
+        <span class="value">{{ transaction()!.createdAt | date: 'medium' }}</span>
+      </div>
+
+      <div class="detail-row metadata">
+        <span class="label">{{ 'common.updated' | translate }}</span>
+        <span class="value">{{ transaction()!.updatedAt | date: 'medium' }}</span>
+      </div>
+
+      <div class="detail-row metadata">
+        <span class="label">ID</span>
+        <span class="value transaction-id">{{ transaction()!.transactionId }}</span>
+      </div>
+    </div>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="close()">{{ 'common.close' | translate }}</button>
+</mat-dialog-actions>

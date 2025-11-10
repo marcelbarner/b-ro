@@ -1,0 +1,102 @@
+mat-form-field.full-width {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+mat-dialog-content {
+  min-width: 500px;
+  padding: 24px;
+}
+
+.transfer-arrow {
+  display: flex;
+  justify-content: center;
+  margin: 8px 0;
+
+  mat-icon {
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+    color: rgba(0, 0, 0, 0.54);
+  }
+}
+
+.preview-container {
+  h3 {
+    margin-top: 0;
+    margin-bottom: 24px;
+    color: rgba(0, 0, 0, 0.87);
+  }
+
+  .preview-section {
+    padding: 16px 0;
+
+    .preview-label {
+      font-weight: 500;
+      color: rgba(0, 0, 0, 0.6);
+      margin-bottom: 8px;
+      font-size: 0.9em;
+    }
+
+    .preview-value {
+      color: rgba(0, 0, 0, 0.87);
+
+      strong {
+        font-size: 1.1em;
+      }
+
+      .account-details {
+        font-size: 0.9em;
+        color: rgba(0, 0, 0, 0.6);
+        margin-top: 4px;
+      }
+
+      .balance-info {
+        font-size: 0.9em;
+        color: rgba(0, 0, 0, 0.6);
+        margin-top: 4px;
+      }
+    }
+
+    &.transfer-amount {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 0;
+
+      mat-icon {
+        font-size: 36px;
+        width: 36px;
+        height: 36px;
+        color: #2196f3;
+        margin-bottom: 8px;
+      }
+
+      .amount-value {
+        font-size: 1.5em;
+        font-weight: 600;
+        color: #2196f3;
+      }
+    }
+  }
+
+  .insufficient-balance-warning {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px;
+    margin-top: 16px;
+    background-color: #fff3e0;
+    border-left: 4px solid #ff9800;
+    color: #e65100;
+    border-radius: 4px;
+
+    mat-icon {
+      color: #ff9800;
+    }
+  }
+}
+
+mat-divider {
+  margin: 8px 0;
+}

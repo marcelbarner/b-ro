@@ -83,6 +83,7 @@
   },
   "validation": {
     "required": "This field is required",
+    "min_amount": "Amount must be greater than 0",
     "min_length": "This value should be no less than {{number}} characters",
     "max_length": "This value should be no more than {{number}} characters",
     "min": "This value should be no less than {{number}}",
@@ -99,6 +100,10 @@
     "last_page_label": "Last page",
     "range_page_label_1": "no record",
     "range_page_label_2": "{{startIndex}} - {{endIndex}} of {{length}}"
+  },
+  "accounts": {
+    "currency": "Currency",
+    "balance": "Balance"
   },
   "en_us": "English",
   "zh_cn": "Simplified Chinese",
@@ -211,5 +216,69 @@
     "loading_rates": "Loading exchange rates...",
     "rates_updated": "Exchange rates updated successfully",
     "rates_update_failed": "Failed to update exchange rates"
+  },
+  "transactions": {
+    "table": {
+      "date": "Date",
+      "type": "Type",
+      "description": "Description",
+      "amount": "Amount",
+      "linked": "Linked"
+    },
+    "type": {
+      "deposit": "Deposit",
+      "withdrawal": "Withdrawal",
+      "transfer": "Transfer",
+      "unknown": "Unknown"
+    },
+    "filters": {
+      "from_date": "From Date",
+      "to_date": "To Date",
+      "type": "Transaction Type",
+      "all_types": "All Types",
+      "clear": "Clear Filters"
+    },
+    "create": {
+      "title": "Create Transaction",
+      "amount": "Amount",
+      "amount_withdrawal": "Withdrawal Amount",
+      "currency_hint": "Must match account currency",
+      "submit": "Create Transaction"
+    },
+    "transfer": {
+      "title": "Transfer Money",
+      "from_account": "From Account",
+      "to_account": "To Account",
+      "preview": "Preview Transfer",
+      "preview_title": "Transfer Preview",
+      "confirm": "Confirm Transfer",
+      "error": {
+        "same_account": "Cannot transfer to the same account",
+        "insufficient_balance": "Insufficient balance for this transfer"
+      }
+    },
+    "detail": {
+      "title": "Transaction Details",
+      "counter_transaction": "Linked Transaction"
+    },
+    "tooltip": {
+      "has_counter_transaction": "This transaction is linked to another transaction"
+    },
+    "no_transactions": "No transactions found",
+    "error": {
+      "load_failed": "Failed to load transactions"
+    }
+  },
+  "common": {
+    "actions": "Actions",
+    "view": "View",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "close": "Close",
+    "back": "Back",
+    "retry": "Retry",
+    "created": "Created",
+    "updated": "Updated",
+    "balance": "Balance"
   }
 }

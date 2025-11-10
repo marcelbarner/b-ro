@@ -1,0 +1,146 @@
+<h2 mat-dialog-title>{{ 'transactions.transfer.title' | translate }}</h2>
+
+<mat-dialog-content>
+  @if (!showPreview()) {
+    <!-- Transfer Form -->
+    <form [formGroup]="transferForm">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'transactions.transfer.from_account' | translate }}</mat-label>
+        <mat-select formControlName="fromAccountId">
+          @for (account of accounts(); track account.id) {
+            <mat-option [value]="account.id">
+              {{ getAccountLabel(account) }}
+            </mat-option>
+          }
+        </mat-select>
+        @if (transferForm.get('fromAccountId')?.hasError('required')) {
+          <mat-error>{{ 'validation.required' | translate }}</mat-error>
+        }
+      </mat-form-field>
+
+      <div class="transfer-arrow">
+        <mat-icon>arrow_downward</mat-icon>
+      </div>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'transactions.transfer.to_account' | translate }}</mat-label>
+        <mat-select formControlName="toAccountId">
+          @for (account of accounts(); track account.id) {
+            <mat-option [value]="account.id">
+              {{ getAccountLabel(account) }}
+            </mat-option>
+          }
+        </mat-select>
+        @if (transferForm.get('toAccountId')?.hasError('required')) {
+          <mat-error>{{ 'validation.required' | translate }}</mat-error>
+        }
+        @if (transferForm.get('toAccountId')?.hasError('sameAccount')) {
+          <mat-error>{{ 'transactions.transfer.error.same_account' | translate }}</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'transactions.create.amount' | translate }}</mat-label>
+        <input matInput type="number" formControlName="amount" step="0.01" min="0.01" />
+        @if (transferForm.get('amount')?.hasError('required')) {
+          <mat-error>{{ 'validation.required' | translate }}</mat-error>
+        }
+        @if (transferForm.get('amount')?.hasError('min')) {
+          <mat-error>{{ 'validation.min_amount' | translate }}</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'transactions.table.description' | translate }}</mat-label>
+        <input matInput formControlName="description" />
+        @if (transferForm.get('description')?.hasError('required')) {
+          <mat-error>{{ 'validation.required' | translate }}</mat-error>
+        }
+      </mat-form-field>
+    </form>
+  } @else {
+    <!-- Preview -->
+    <div class="preview-container">
+      <h3>{{ 'transactions.transfer.preview_title' | translate }}</h3>
+
+      <div class="preview-section">
+        <div class="preview-label">{{ 'transactions.transfer.from_account' | translate }}</div>
+        <div class="preview-value">
+          <strong>{{ fromAccount()?.name }}</strong>
+          <div class="account-details">
+            {{ fromAccount()?.iban }} - {{ fromAccount()?.currency }}
+          </div>
+          <div class="balance-info">
+            {{ 'accounts.balance' | translate }}: {{ fromAccount()?.balance | number: '1.2-2' }}
+            {{ fromAccount()?.currency }}
+          </div>
+        </div>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <div class="preview-section transfer-amount">
+        <mat-icon>swap_vert</mat-icon>
+        <div class="amount-value">
+          {{ transferAmount() | number: '1.2-2' }} {{ fromAccount()?.currency }}
+        </div>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <div class="preview-section">
+        <div class="preview-label">{{ 'transactions.transfer.to_account' | translate }}</div>
+        <div class="preview-value">
+          <strong>{{ toAccount()?.name }}</strong>
+          <div class="account-details">{{ toAccount()?.iban }} - {{ toAccount()?.currency }}</div>
+          <div class="balance-info">
+            {{ 'accounts.balance' | translate }}: {{ toAccount()?.balance | number: '1.2-2' }}
+            {{ toAccount()?.currency }}
+          </div>
+        </div>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <div class="preview-section">
+        <div class="preview-label">{{ 'transactions.table.description' | translate }}</div>
+        <div class="preview-value">{{ transferForm.get('description')?.value }}</div>
+      </div>
+
+      @if (!canTransfer()) {
+        <div class="insufficient-balance-warning">
+          <mat-icon>warning</mat-icon>
+          {{ 'transactions.transfer.error.insufficient_balance' | translate }}
+        </div>
+      }
+    </div>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  @if (!showPreview()) {
+    <button mat-button type="button" (click)="cancel()" [disabled]="isSubmitting()">
+      {{ 'common.cancel' | translate }}
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="preview()"
+      [disabled]="transferForm.invalid || isLoadingAccounts()"
+    >
+      {{ 'transactions.transfer.preview' | translate }}
+    </button>
+  } @else {
+    <button mat-button type="button" (click)="backToForm()" [disabled]="isSubmitting()">
+      {{ 'common.back' | translate }}
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="confirmTransfer()"
+      [disabled]="!canTransfer() || isSubmitting()"
+    >
+      {{ 'transactions.transfer.confirm' | translate }}
+    </button>
+  }
+</mat-dialog-actions>
