@@ -8,44 +8,71 @@
     <h2>{{ 'finance.account_details' | translate }}</h2>
   </div>
 
-  @if (isLoading) {
+  @if (isLoading()) {
     <div class="loading">
       <mat-spinner></mat-spinner>
     </div>
   }
 
-  @if (error) {
+  @if (error()) {
     <div class="error">
-      {{ error }}
+      {{ error() }}
       <button mat-raised-button color="primary" (click)="goBack()">{{ 'finance.go_back' | translate }}</button>
     </div>
   }
 
-  @if (account && !isLoading) {
+  @if (account() && !isLoading()) {
     <mat-card>
       <mat-card-header>
-        <mat-card-title>{{ account.name }}</mat-card-title>
-        <mat-card-subtitle>{{ account.iban }}</mat-card-subtitle>
+        <mat-card-title>{{ account()!.name }}</mat-card-title>
+        <mat-card-subtitle>{{ account()!.iban }}</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
         <div class="account-info">
           <div class="info-row">
             <span class="label">{{ 'finance.currency' | translate }}:</span>
-            <span class="value">{{ account.currency }}</span>
+            <span class="value">{{ account()!.currency }}</span>
           </div>
           <div class="info-row">
             <span class="label">{{ 'finance.balance' | translate }}:</span>
             <span class="value balance">
-              {{ account.balance | number : '1.2-2' }} {{ account.currency }}
+              {{ account()!.balance | currencyFormat : account()!.currency }}
             </span>
           </div>
+
+          @if (convertedBalance() !== null && account()!.currency !== displayCurrency()) {
+            <div class="info-row conversion-info">
+              <span class="label">
+                {{ 'currency.converted_amount' | translate }} ({{ displayCurrency() }}):
+              </span>
+              <span class="value balance">
+                {{ convertedBalance() | currencyFormat : displayCurrency() }}
+              </span>
+            </div>
+            @if (exchangeRate() !== null) {
+              <div class="info-row exchange-rate">
+                <span class="label">{{ 'currency.exchange_rate' | translate }}:</span>
+                <span class="value">
+                  1 {{ account()!.currency }} = {{ exchangeRate() | number : '1.4-4' }} {{ displayCurrency() }}
+                </span>
+              </div>
+            }
+          }
+
+          @if (lastRateUpdate()) {
+            <div class="info-row">
+              <span class="label">{{ 'currency.last_rate_update' | translate }}:</span>
+              <span class="value">{{ lastRateUpdate() | date : 'medium' }}</span>
+            </div>
+          }
+
           <div class="info-row">
             <span class="label">{{ 'finance.created_at' | translate }}:</span>
-            <span class="value">{{ account.createdAt | date : 'medium' }}</span>
+            <span class="value">{{ account()!.createdAt | date : 'medium' }}</span>
           </div>
           <div class="info-row">
             <span class="label">{{ 'finance.last_updated' | translate }}:</span>
-            <span class="value">{{ account.updatedAt | date : 'medium' }}</span>
+            <span class="value">{{ account()!.updatedAt | date : 'medium' }}</span>
           </div>
         </div>
         <div class="transactions-section">

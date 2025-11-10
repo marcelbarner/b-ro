@@ -191,5 +191,25 @@
     "currency_invalid": "Currency must be a 3-letter code (e.g., EUR, USD)",
     "initial_balance_required": "Initial balance is required",
     "initial_balance_min": "Initial balance must be at least 0"
+  },
+  "currency": {
+    "preferred_currency": "Preferred Currency",
+    "display_currency": "Display Currency",
+    "select_currency": "Select your preferred display currency",
+    "converted_amount": "Converted Amount",
+    "exchange_rate": "Exchange Rate",
+    "last_updated": "Last Updated",
+    "last_rate_update": "Last Rate Update",
+    "refresh_rates": "Refresh Rates",
+    "original_amount": "Original Amount",
+    "rate_used": "Rate Used",
+    "data_source": "Data Source",
+    "ecb_source": "European Central Bank (ECB)",
+    "conversion_info": "Converted using exchange rate",
+    "rate_on_date": "Rate on {{date}}",
+    "no_rate_available": "Exchange rate not available",
+    "loading_rates": "Loading exchange rates...",
+    "rates_updated": "Exchange rates updated successfully",
+    "rates_update_failed": "Failed to update exchange rates"
   }
 }
