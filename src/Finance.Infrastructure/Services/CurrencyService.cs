@@ -217,18 +217,51 @@ public class CurrencyService : ICurrencyService
 
     /// <summary>
     /// Gets a direct exchange rate from EUR to the target currency.
+    /// If no rate exists for the specified date, falls back to the most recent available date.
     /// </summary>
     private async Task<decimal?> GetDirectRateAsync(
         DateOnly date,
         string targetCurrency,
         CancellationToken cancellationToken)
     {
+        // First try the exact date
         var rate = await _context.ExchangeRates
             .Where(e => e.Date == date
                 && e.BaseCurrency == "EUR"
                 && e.TargetCurrency == targetCurrency)
             .Select(e => (decimal?)e.Rate)
             .FirstOrDefaultAsync(cancellationToken);
+
+        if (rate.HasValue)
+        {
+            return rate;
+        }
+
+        // If no rate for exact date, get the most recent available rate before or on that date
+        _logger.LogDebug("No rate found for {Date}, looking for most recent rate for {Currency}", 
+            date, targetCurrency);
+
+        rate = await _context.ExchangeRates
+            .Where(e => e.Date <= date
+                && e.BaseCurrency == "EUR"
+                && e.TargetCurrency == targetCurrency)
+            .OrderByDescending(e => e.Date)
+            .Select(e => (decimal?)e.Rate)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (rate.HasValue)
+        {
+            var actualDate = await _context.ExchangeRates
+                .Where(e => e.Date <= date
+                    && e.BaseCurrency == "EUR"
+                    && e.TargetCurrency == targetCurrency)
+                .OrderByDescending(e => e.Date)
+                .Select(e => e.Date)
+                .FirstOrDefaultAsync(cancellationToken);
+
+            _logger.LogDebug("Using rate from {ActualDate} instead of {RequestedDate} for {Currency}",
+                actualDate, date, targetCurrency);
+        }
 
         return rate;
     }
