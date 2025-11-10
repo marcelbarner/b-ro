@@ -83,7 +83,8 @@
           "defaultConfiguration": "development",
           "options": {
             "buildTarget": "frontend:build",
-            "proxyConfig": "proxy.config.js"
+            "proxyConfig": "proxy.config.js",
+            "port": 4201
           }
         },
         "extract-i18n": {

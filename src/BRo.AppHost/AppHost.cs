@@ -15,7 +15,6 @@ var financeApi = builder.AddProject<Projects.Finance_API>("finance-api")
 // Angular Frontend
 var frontend = builder.AddNpmApp("frontend", "../frontend", "start")
     .WithHttpEndpoint(env: "PORT")
-    .WithExternalHttpEndpoints()
-    .PublishAsDockerFile();
+    .WithExternalHttpEndpoints();
 
 builder.Build().Run();
