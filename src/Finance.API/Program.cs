@@ -71,12 +71,35 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
-// Apply migrations automatically in development
+// Apply migrations and seed initial data in development
 if (app.Environment.IsDevelopment())
 {
     using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<FinanceDbContext>();
     db.Database.Migrate();
+    
+    // Seed initial exchange rates if database is empty
+    if (!await db.ExchangeRates.AnyAsync())
+    {
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+        logger.LogInformation("Database is empty, seeding initial exchange rates...");
+        
+        var provider = scope.ServiceProvider.GetRequiredService<IExchangeRateProvider>();
+        try
+        {
+            var rates = await provider.Fetch90DayRatesAsync(CancellationToken.None);
+            if (rates != null && rates.Any())
+            {
+                await db.ExchangeRates.AddRangeAsync(rates);
+                await db.SaveChangesAsync();
+                logger.LogInformation("Seeded {Count} exchange rates", rates.Count());
+            }
+        }
+        catch (Exception ex)
+        {
+            logger.LogWarning(ex, "Failed to seed initial exchange rates. Background job will retry.");
+        }
+    }
 }
 
 // Configure the HTTP request pipeline
