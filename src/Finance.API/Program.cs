@@ -11,6 +11,9 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add service defaults & Aspire components
+builder.AddServiceDefaults();
+
 // Add CORS
 builder.Services.AddCors(options =>
 {
@@ -35,22 +38,8 @@ builder.Services.AddMemoryCache();
 // Add HttpClient for ECB provider
 builder.Services.AddHttpClient<IExchangeRateProvider, EcbExchangeRateProvider>();
 
-// Add DbContext
-builder.Services.AddDbContext<FinanceDbContext>(options =>
-{
-    var connectionString = builder.Configuration.GetConnectionString("FinanceDb")
-        ?? "Data Source=finance.db";
-
-    // Use SQLite for development, PostgreSQL for production
-    if (builder.Environment.IsDevelopment())
-    {
-        options.UseSqlite(connectionString);
-    }
-    else
-    {
-        options.UseNpgsql(connectionString);
-    }
-});
+// Add DbContext with Aspire PostgreSQL connection
+builder.AddNpgsqlDbContext<FinanceDbContext>("finance-db");
 
 // Add repositories
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
@@ -88,5 +77,8 @@ app.UseCors("AllowFrontend");
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+
+// Map health checks endpoint from ServiceDefaults
+app.MapDefaultEndpoints();
 
 app.Run();
