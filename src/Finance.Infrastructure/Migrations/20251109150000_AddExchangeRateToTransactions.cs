@@ -22,8 +22,8 @@ namespace Finance.Infrastructure.Migrations
             // For non-EUR transactions created before this migration, we cannot
             // retroactively determine the historical exchange rate, so we leave it as NULL
             migrationBuilder.Sql(
-                @"UPDATE Transactions 
-                  SET ExchangeRateToEUR = NULL 
+                @"UPDATE Transactions
+                  SET ExchangeRateToEUR = NULL
                   WHERE Currency = 'EUR' OR ExchangeRateToEUR IS NULL");
         }
 

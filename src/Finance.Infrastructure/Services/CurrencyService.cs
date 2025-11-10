@@ -40,7 +40,7 @@ public class CurrencyService : ICurrencyService
     {
         if (string.IsNullOrWhiteSpace(fromCurrency))
             throw new ArgumentException("From currency cannot be empty.", nameof(fromCurrency));
-        
+
         if (string.IsNullOrWhiteSpace(toCurrency))
             throw new ArgumentException("To currency cannot be empty.", nameof(toCurrency));
 
@@ -128,7 +128,7 @@ public class CurrencyService : ICurrencyService
 
         // Cache for 1 hour
         _cache.Set(CachePrefixLatestRates, rates, CacheDuration);
-        
+
         _logger.LogInformation("Retrieved {Count} latest exchange rates for {Date}",
             rates.Count, latestDate.Value);
 
@@ -159,7 +159,7 @@ public class CurrencyService : ICurrencyService
 
         // Cache for 1 hour
         _cache.Set(CachePrefixSupportedCurrencies, currencies, CacheDuration);
-        
+
         _logger.LogInformation("Retrieved {Count} supported currencies", currencies.Count);
 
         return currencies;
@@ -180,12 +180,12 @@ public class CurrencyService : ICurrencyService
         var conversionDate = date ?? DateOnly.FromDateTime(DateTime.UtcNow);
 
         var rate = await GetRateAsync(conversionDate, fromCurrency, toCurrency, cancellationToken);
-        
+
         if (!rate.HasValue)
             return null;
 
         var convertedAmount = amount * rate.Value;
-        
+
         _logger.LogDebug("Converted {Amount} {From} to {Result} {To} using rate {Rate}",
             amount, fromCurrency, convertedAmount, toCurrency, rate.Value);
 

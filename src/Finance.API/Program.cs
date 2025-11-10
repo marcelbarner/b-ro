@@ -38,9 +38,9 @@ builder.Services.AddHttpClient<IExchangeRateProvider, EcbExchangeRateProvider>()
 // Add DbContext
 builder.Services.AddDbContext<FinanceDbContext>(options =>
 {
-    var connectionString = builder.Configuration.GetConnectionString("FinanceDb") 
+    var connectionString = builder.Configuration.GetConnectionString("FinanceDb")
         ?? "Data Source=finance.db";
-    
+
     // Use SQLite for development, PostgreSQL for production
     if (builder.Environment.IsDevelopment())
     {

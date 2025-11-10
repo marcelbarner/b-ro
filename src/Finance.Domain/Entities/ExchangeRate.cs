@@ -64,7 +64,7 @@ public class ExchangeRate
     {
         if (string.IsNullOrWhiteSpace(targetCurrency))
             throw new ArgumentException("Target currency cannot be empty.", nameof(targetCurrency));
-        
+
         if (rate <= 0)
             throw new ArgumentException("Exchange rate must be positive.", nameof(rate));
 

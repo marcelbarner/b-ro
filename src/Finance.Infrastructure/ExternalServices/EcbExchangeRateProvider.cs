@@ -51,7 +51,7 @@ public class EcbExchangeRateProvider : IExchangeRateProvider
         {
             // Fetch XML data
             var xmlContent = await _httpClient.GetStringAsync(url, cancellationToken);
-            
+
             // Parse XML
             var document = XDocument.Parse(xmlContent);
             var rates = ParseExchangeRates(document, source);

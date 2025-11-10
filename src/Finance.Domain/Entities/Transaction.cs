@@ -76,9 +76,9 @@ public class Transaction
     /// For EUR transactions, returns the original amount.
     /// For other currencies, converts using the stored exchange rate.
     /// </summary>
-    public decimal ConvertedAmountEUR => 
-        Currency == "EUR" 
-            ? Amount 
+    public decimal ConvertedAmountEUR =>
+        Currency == "EUR"
+            ? Amount
             : Amount * (ExchangeRateToEUR ?? 1.0m);
 
     // Private constructor for EF Core
@@ -158,7 +158,7 @@ public class Transaction
 
         CounterTransactionId = counterTransaction.TransactionId;
         counterTransaction.CounterTransactionId = TransactionId;
-        
+
         UpdatedAt = DateTimeOffset.UtcNow;
         counterTransaction.UpdatedAt = DateTimeOffset.UtcNow;
     }
