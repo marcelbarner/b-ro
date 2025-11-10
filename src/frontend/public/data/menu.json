@@ -13,7 +13,7 @@
       "icon": "account_balance",
       "children": [
         {
-          "route": "finance/accounts",
+          "route": "accounts",
           "name": "accounts",
           "type": "link"
         }
