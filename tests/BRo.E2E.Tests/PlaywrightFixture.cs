@@ -28,13 +28,13 @@ public class PlaywrightFixture : IAsyncLifetime
     {
         if (Page != null)
             await Page.CloseAsync();
-        
+
         if (Context != null)
             await Context.CloseAsync();
-        
+
         if (_browser != null)
             await _browser.CloseAsync();
-        
+
         _playwright?.Dispose();
     }
 }

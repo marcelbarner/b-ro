@@ -77,13 +77,13 @@ if (app.Environment.IsDevelopment())
     using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<FinanceDbContext>();
     db.Database.Migrate();
-    
+
     // Seed initial exchange rates if database is empty
     if (!await db.ExchangeRates.AnyAsync())
     {
         var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
         logger.LogInformation("Database is empty, seeding initial exchange rates...");
-        
+
         var provider = scope.ServiceProvider.GetRequiredService<IExchangeRateProvider>();
         try
         {
