@@ -76,8 +76,23 @@
           </div>
         </div>
         <div class="transactions-section">
-          <h3>{{ 'finance.transactions' | translate }}</h3>
-          <p class="placeholder">{{ 'finance.transaction_list_placeholder' | translate }}</p>
+          <div class="transactions-header">
+            <h3>{{ 'finance.transactions' | translate }}</h3>
+            <div class="action-buttons">
+              <button mat-raised-button color="primary" (click)="createTransaction()">
+                <mat-icon>add</mat-icon>
+                {{ 'transactions.create.title' | translate }}
+              </button>
+              <button mat-raised-button color="accent" (click)="createTransfer()">
+                <mat-icon>swap_horiz</mat-icon>
+                {{ 'transactions.transfer.title' | translate }}
+              </button>
+            </div>
+          </div>
+          <app-transaction-list
+            [accountId]="account()!.id"
+            [accountCurrency]="account()!.currency"
+          ></app-transaction-list>
         </div>
       </mat-card-content>
       <mat-card-actions>
