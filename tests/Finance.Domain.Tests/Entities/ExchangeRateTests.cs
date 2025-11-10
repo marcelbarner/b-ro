@@ -53,7 +53,7 @@ public class ExchangeRateTests
         // Act & Assert
         var exception = Assert.Throws<ArgumentException>(() =>
             new ExchangeRate(date, currency, 1.0874m, ExchangeRateSource.ECB90Day));
-        
+
         Assert.Equal("targetCurrency", exception.ParamName);
     }
 
@@ -69,7 +69,7 @@ public class ExchangeRateTests
         // Act & Assert
         var exception = Assert.Throws<ArgumentException>(() =>
             new ExchangeRate(date, "USD", rate, ExchangeRateSource.ECB90Day));
-        
+
         Assert.Equal("rate", exception.ParamName);
     }
 
@@ -82,7 +82,7 @@ public class ExchangeRateTests
             "USD",
             1.0874m,
             ExchangeRateSource.ECB90Day);
-        
+
         var newRate = 1.0950m;
         var newSource = ExchangeRateSource.ECBHistorical;
 
@@ -109,7 +109,7 @@ public class ExchangeRateTests
         // Act & Assert
         var exception = Assert.Throws<ArgumentException>(() =>
             exchangeRate.UpdateRate(rate, ExchangeRateSource.ECBHistorical));
-        
+
         Assert.Equal("newRate", exception.ParamName);
     }
 }

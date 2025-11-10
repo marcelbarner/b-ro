@@ -121,7 +121,7 @@ public class CurrenciesController : ControllerBase
         }
 
         var conversionDate = date ?? DateOnly.FromDateTime(DateTime.UtcNow);
-        
+
         var convertedAmount = await _currencyService.ConvertAmountAsync(
             amount,
             from,

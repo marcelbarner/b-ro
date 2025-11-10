@@ -64,7 +64,7 @@ public class ExchangeRateUpdateJob : BackgroundService
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Unexpected error in Exchange Rate Update Job");
-                
+
                 // Wait a bit before retrying to avoid tight loop on persistent errors
                 await Task.Delay(TimeSpan.FromMinutes(30), stoppingToken);
             }
