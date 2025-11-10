@@ -5,7 +5,7 @@
     <button mat-icon-button (click)="goBack()">
       <mat-icon>arrow_back</mat-icon>
     </button>
-    <h2>Account Details</h2>
+    <h2>{{ 'finance.account_details' | translate }}</h2>
   </div>
 
   @if (isLoading) {
@@ -17,7 +17,7 @@
   @if (error) {
     <div class="error">
       {{ error }}
-      <button mat-raised-button color="primary" (click)="goBack()">Go Back</button>
+      <button mat-raised-button color="primary" (click)="goBack()">{{ 'finance.go_back' | translate }}</button>
     </div>
   }
 
@@ -30,31 +30,31 @@
       <mat-card-content>
         <div class="account-info">
           <div class="info-row">
-            <span class="label">Currency:</span>
+            <span class="label">{{ 'finance.currency' | translate }}:</span>
             <span class="value">{{ account.currency }}</span>
           </div>
           <div class="info-row">
-            <span class="label">Balance:</span>
+            <span class="label">{{ 'finance.balance' | translate }}:</span>
             <span class="value balance">
               {{ account.balance | number : '1.2-2' }} {{ account.currency }}
             </span>
           </div>
           <div class="info-row">
-            <span class="label">Created:</span>
+            <span class="label">{{ 'finance.created_at' | translate }}:</span>
             <span class="value">{{ account.createdAt | date : 'medium' }}</span>
           </div>
           <div class="info-row">
-            <span class="label">Last Updated:</span>
+            <span class="label">{{ 'finance.last_updated' | translate }}:</span>
             <span class="value">{{ account.updatedAt | date : 'medium' }}</span>
           </div>
         </div>
         <div class="transactions-section">
-          <h3>Transactions</h3>
-          <p class="placeholder">Transaction list will be implemented in Issue #9</p>
+          <h3>{{ 'finance.transactions' | translate }}</h3>
+          <p class="placeholder">{{ 'finance.transaction_list_placeholder' | translate }}</p>
         </div>
       </mat-card-content>
       <mat-card-actions>
-        <button mat-button (click)="goBack()">Back to Accounts</button>
+        <button mat-button (click)="goBack()">{{ 'finance.back_to_accounts' | translate }}</button>
       </mat-card-actions>
     </mat-card>
   }

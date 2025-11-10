@@ -14,6 +14,7 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { TranslateModule } from '@ngx-translate/core';
 import { Account } from '@shared';
 
 export interface AccountDialogData {
@@ -32,7 +33,8 @@ export interface AccountDialogData {
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
+    TranslateModule,
 ],
 })
 export class AccountDialogComponent implements OnInit {
