@@ -5,6 +5,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslateModule } from '@ngx-translate/core';
 import { CurrencyService, CurrencyInfo } from '../../services/currency.service';
 
 @Component({
@@ -17,14 +18,15 @@ import { CurrencyService, CurrencyInfo } from '../../services/currency.service';
     MatFormFieldModule,
     MatIconModule,
     MatTooltipModule,
+    TranslateModule,
   ],
   template: `
     <mat-form-field appearance="outline" class="currency-selector">
-      <mat-label>Display Currency</mat-label>
+      <mat-label>{{ 'currency.display_currency' | translate }}</mat-label>
       <mat-select
         [(ngModel)]="selectedCurrency"
         (selectionChange)="onCurrencyChange()"
-        [matTooltip]="'Select your preferred display currency'">
+        [matTooltip]="'currency.select_currency' | translate">
         <mat-option *ngFor="let currency of currencies" [value]="currency.code">
           <span class="currency-option">
             <span class="currency-symbol">{{ currency.symbol }}</span>

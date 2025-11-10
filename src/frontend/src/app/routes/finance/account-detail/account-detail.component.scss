@@ -53,6 +53,31 @@
             color: #2e7d32;
           }
         }
+
+        &.conversion-info {
+          background-color: rgba(33, 150, 243, 0.08);
+          padding: 12px 16px;
+          margin: 8px -16px;
+          border-radius: 4px;
+
+          .label {
+            color: rgba(33, 150, 243, 0.87);
+          }
+
+          .value.balance {
+            color: #1976d2;
+          }
+        }
+
+        &.exchange-rate {
+          font-size: 0.9em;
+          padding: 8px 0;
+
+          .value {
+            font-family: 'Courier New', monospace;
+            color: rgba(0, 0, 0, 0.87);
+          }
+        }
       }
     }
 
