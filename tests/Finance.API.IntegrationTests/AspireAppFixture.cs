@@ -36,7 +36,7 @@ public class AspireAppFixture : IAsyncLifetime
         await _app.StartAsync();
 
         // Create HTTP client for the Finance API
-        _httpClient = _app.CreateHttpClient("financeapi");
+        _httpClient = _app.CreateHttpClient("finance-api");
     }
 
     /// <summary>
