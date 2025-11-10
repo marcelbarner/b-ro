@@ -176,8 +176,20 @@ public class CurrencyService : ICurrencyService
         if (amount < 0)
             throw new ArgumentException("Amount cannot be negative.", nameof(amount));
 
-        // Use latest rate if no date specified
-        var conversionDate = date ?? DateOnly.FromDateTime(DateTime.UtcNow);
+        // Use latest available rate if no date specified
+        DateOnly conversionDate;
+        if (date.HasValue)
+        {
+            conversionDate = date.Value;
+        }
+        else
+        {
+            // Get the most recent date with rates (ECB doesn't publish on weekends)
+            var latestDate = await _context.ExchangeRates
+                .MaxAsync(e => (DateOnly?)e.Date, cancellationToken);
+            
+            conversionDate = latestDate ?? DateOnly.FromDateTime(DateTime.UtcNow);
+        }
 
         var rate = await GetRateAsync(conversionDate, fromCurrency, toCurrency, cancellationToken);
 
@@ -212,7 +224,9 @@ public class CurrencyService : ICurrencyService
         CancellationToken cancellationToken)
     {
         var rate = await _context.ExchangeRates
-            .Where(e => e.Date == date && e.TargetCurrency == targetCurrency)
+            .Where(e => e.Date == date 
+                && e.BaseCurrency == "EUR" 
+                && e.TargetCurrency == targetCurrency)
             .Select(e => (decimal?)e.Rate)
             .FirstOrDefaultAsync(cancellationToken);
 

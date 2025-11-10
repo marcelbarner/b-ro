@@ -76,7 +76,7 @@ export class AccountListComponent implements OnInit {
 
   loadAccounts(): void {
     this.isLoading = true;
-    
+
     // Load accounts with conversion
     this.accountService.getAccountsWithConvertedBalances(this.displayCurrency).subscribe({
       next: (accounts) => {
