@@ -43,3 +43,28 @@ export interface AccountResponse {
   createdAt: string;
   updatedAt: string;
 }
+
+/**
+ * Account with converted balance in another currency
+ */
+export interface AccountWithConvertedBalance {
+  accountId: string;
+  name: string;
+  iban: string;
+  originalCurrency: string;
+  originalBalance: number;
+  convertedCurrency: string;
+  convertedBalance: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+/**
+ * Portfolio total in a specific currency
+ */
+export interface PortfolioTotal {
+  currency: string;
+  totalBalance: number;
+  accountCount: number;
+  calculatedAt: string;
+}

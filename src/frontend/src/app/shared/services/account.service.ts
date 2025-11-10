@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import {
   Account,
   AccountResponse,
   CreateAccountDto,
   UpdateAccountDto,
+  AccountWithConvertedBalance,
+  PortfolioTotal,
 } from '../interfaces/account.model';
 
 @Injectable({
@@ -23,6 +25,22 @@ export class AccountService {
     return this.http
       .get<AccountResponse[]>(this.apiUrl)
       .pipe(map((accounts) => accounts.map(this.mapToAccount)));
+  }
+
+  /**
+   * Get all accounts with balances converted to specified currency
+   */
+  getAccountsWithConvertedBalances(currency: string): Observable<AccountWithConvertedBalance[]> {
+    const params = new HttpParams().set('currency', currency);
+    return this.http.get<AccountWithConvertedBalance[]>(this.apiUrl, { params });
+  }
+
+  /**
+   * Get portfolio total in specified currency
+   */
+  getPortfolioTotal(currency: string): Observable<PortfolioTotal> {
+    const params = new HttpParams().set('currency', currency);
+    return this.http.get<PortfolioTotal>(`${this.apiUrl}/total`, { params });
   }
 
   /**

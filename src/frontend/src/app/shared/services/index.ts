@@ -5,3 +5,4 @@ export * from './paginator-i18n.service';
 
 // Finance domain services
 export * from './account.service';
+export * from './currency.service';
