@@ -5,6 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { TranslateModule } from '@ngx-translate/core';
 import { PageHeaderComponent } from '@shared';
 import { AccountService, Account } from '@shared';
 
@@ -20,6 +21,7 @@ import { AccountService, Account } from '@shared';
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
+    TranslateModule,
     PageHeaderComponent,
   ],
 })
