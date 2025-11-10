@@ -28,6 +28,9 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
+      - name: Trust ASP.NET Core development certificate
+        run: dotnet dev-certs https --trust --quiet || true
+
       - name: Cache NuGet packages
         uses: actions/cache@v4
         with:
