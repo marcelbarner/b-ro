@@ -45,14 +45,14 @@ public class ExchangeRateTests
     [InlineData(null)]
     [InlineData("")]
     [InlineData("   ")]
-    public void Constructor_WithInvalidCurrency_ThrowsArgumentException(string currency)
+    public void Constructor_WithInvalidCurrency_ThrowsArgumentException(string? currency)
     {
         // Arrange
         var date = new DateOnly(2025, 11, 8);
 
         // Act & Assert
         var exception = Assert.Throws<ArgumentException>(() =>
-            new ExchangeRate(date, currency, 1.0874m, ExchangeRateSource.ECB90Day));
+            new ExchangeRate(date, currency!, 1.0874m, ExchangeRateSource.ECB90Day));
 
         Assert.Equal("targetCurrency", exception.ParamName);
     }

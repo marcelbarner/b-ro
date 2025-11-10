@@ -36,7 +36,28 @@ public class AspireAppFixture : IAsyncLifetime
         await _app.StartAsync();
 
         // Create HTTP client for the Finance API
-        _httpClient = _app.CreateHttpClient("financeapi");
+        // In CI environments (Linux), we may need to skip SSL certificate validation
+        var httpClient = _app.CreateHttpClient("finance-api");
+        
+        // Configure to accept any SSL certificate in test environments
+        var handler = new HttpClientHandler
+        {
+            ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+        };
+        
+        _httpClient = new HttpClient(handler)
+        {
+            BaseAddress = httpClient.BaseAddress,
+            Timeout = httpClient.Timeout
+        };
+        
+        // Copy default request headers
+        foreach (var header in httpClient.DefaultRequestHeaders)
+        {
+            _httpClient.DefaultRequestHeaders.Add(header.Key, header.Value);
+        }
+        
+        httpClient.Dispose();
     }
 
     /// <summary>
@@ -45,7 +66,7 @@ public class AspireAppFixture : IAsyncLifetime
     public async Task DisposeAsync()
     {
         _httpClient?.Dispose();
-        
+
         if (_app != null)
         {
             await _app.DisposeAsync();

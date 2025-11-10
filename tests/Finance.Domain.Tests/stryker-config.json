@@ -1,0 +1,28 @@
+{
+  "$schema": "https://raw.githubusercontent.com/stryker-mutator/stryker-net/master/src/Stryker.Core/Stryker.Core/schema.json",
+  "stryker-config": {
+    "project": "Finance.Domain.Tests.csproj",
+    "reporters": [
+      "html",
+      "cleartext",
+      "json",
+      "progress"
+    ],
+    "thresholds": {
+      "high": 80,
+      "low": 60,
+      "break": 50
+    },
+    "mutation-level": "standard",
+    "concurrency": 4,
+    "ignore-mutations": [
+      "string"
+    ],
+    "test-runner": "dotnet test",
+    "coverage-analysis": "perTest",
+    "open-report": false,
+    "baseline": {
+      "enabled": false
+    }
+  }
+}

@@ -65,7 +65,7 @@ public class TransactionRepository : ITransactionRepository
             {
                 var counterTransaction = await _context.Transactions
                     .FindAsync(new object[] { transaction.CounterTransactionId.Value }, cancellationToken);
-                
+
                 if (counterTransaction != null)
                 {
                     counterTransaction.UnlinkCounterTransaction();

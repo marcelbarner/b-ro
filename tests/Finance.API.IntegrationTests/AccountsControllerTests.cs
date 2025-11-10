@@ -1,7 +1,7 @@
 using System.Net;
 using System.Net.Http.Json;
-using FluentAssertions;
 using Finance.API.DTOs;
+using FluentAssertions;
 
 namespace Finance.API.IntegrationTests;
 

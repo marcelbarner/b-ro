@@ -238,7 +238,7 @@ public class CurrencyService : ICurrencyService
         }
 
         // If no rate for exact date, get the most recent available rate before or on that date
-        _logger.LogDebug("No rate found for {Date}, looking for most recent rate for {Currency}", 
+        _logger.LogDebug("No rate found for {Date}, looking for most recent rate for {Currency}",
             date, targetCurrency);
 
         rate = await _context.ExchangeRates

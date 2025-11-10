@@ -131,6 +131,29 @@ When generating production code:
 5. Set up project structure following clean architecture
 
 ### When Committing Changes
+
+**BEFORE COMMITTING, ALWAYS:**
+1. **Verify Code Formatting**
+   - Run `dotnet format --verify-no-changes` to check formatting
+   - If formatting issues exist, run `dotnet format` to fix them
+   - Ensure all files follow `.editorconfig` standards
+
+2. **Run Tests**
+   - Run `dotnet test` to execute all unit and integration tests
+   - Ensure all tests pass before committing
+   - Fix any failing tests before proceeding
+   - Verify code coverage meets the 70% threshold
+
+3. **Run Mutation Testing**
+   - Run `dotnet stryker` in the test project directory (e.g., `tests/Finance.Domain.Tests`)
+   - Review mutation score to ensure quality (target: High ≥80%, Low ≥60%)
+   - Address any gaps in test effectiveness revealed by mutations
+
+4. **Build Successfully**
+   - Run `dotnet build` to ensure the solution builds without errors
+   - Address any compiler warnings (warnings are treated as errors in CI)
+
+**Commit Message Format:**
 - Use Conventional Commits format: `<type>(<scope>): <description>`
 - Types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`, `perf`, `ci`, `build`
 - Keep commits small and focused on a single logical change

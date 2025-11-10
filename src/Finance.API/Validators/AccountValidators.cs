@@ -1,6 +1,6 @@
+using System.Text.RegularExpressions;
 using Finance.API.DTOs;
 using FluentValidation;
-using System.Text.RegularExpressions;
 
 namespace Finance.API.Validators;
 
