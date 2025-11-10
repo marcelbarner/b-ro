@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { AccountWithConvertedBalance } from '../interfaces';
 
 export interface CurrencyInfo {
   code: string;
@@ -35,18 +36,6 @@ export interface PortfolioTotalResponse {
   totalBalance: number;
   accountCount: number;
   calculatedAt: string;
-}
-
-export interface AccountWithConvertedBalance {
-  accountId: string;
-  name: string;
-  iban: string;
-  originalCurrency: string;
-  originalBalance: number;
-  convertedCurrency: string;
-  convertedBalance: number;
-  createdAt: string;
-  updatedAt: string;
 }
 
 @Injectable({
