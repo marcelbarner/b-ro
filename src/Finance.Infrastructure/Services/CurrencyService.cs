@@ -187,7 +187,7 @@ public class CurrencyService : ICurrencyService
             // Get the most recent date with rates (ECB doesn't publish on weekends)
             var latestDate = await _context.ExchangeRates
                 .MaxAsync(e => (DateOnly?)e.Date, cancellationToken);
-            
+
             conversionDate = latestDate ?? DateOnly.FromDateTime(DateTime.UtcNow);
         }
 
@@ -224,8 +224,8 @@ public class CurrencyService : ICurrencyService
         CancellationToken cancellationToken)
     {
         var rate = await _context.ExchangeRates
-            .Where(e => e.Date == date 
-                && e.BaseCurrency == "EUR" 
+            .Where(e => e.Date == date
+                && e.BaseCurrency == "EUR"
                 && e.TargetCurrency == targetCurrency)
             .Select(e => (decimal?)e.Rate)
             .FirstOrDefaultAsync(cancellationToken);
